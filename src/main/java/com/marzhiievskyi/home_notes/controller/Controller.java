@@ -26,9 +26,9 @@ public class Controller {
 
     @PostMapping("/test")
     public ResponseEntity<Response> testMethod() {
-        log.info("Start endpoint 'test'");
+        log.info("Start ENDPOINT 'test'");
         ResponseEntity<Response> response = homeNotesService.testMethod();
-        log.info("End endpoint 'test" + response.toString());
+        log.info("End ENDPOINT 'test" + response.toString());
         return response;
     }
 }
