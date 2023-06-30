@@ -2,12 +2,16 @@ package com.marzhiievskyi.home_notes.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
 
-import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
+@Entity
 @Table(schema = "home_notes", name = "user")
 public class User {
     @Id
@@ -22,5 +26,6 @@ public class User {
     private String accessToken;
 
     @Column(name = "time_insert")
-    private Date insertTime;
+    @CreationTimestamp
+    private LocalDateTime timeInsert;
 }

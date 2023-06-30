@@ -31,13 +31,9 @@ public class HomeNotesService {
         validationUtil.validationRequest(registerRequest);
 
         String nickname = registerRequest.getNickname();
-        if (userDao.existsUserLikeNickname(nickname)) {
-            throw CommonException.builder()
-                    .code(Code.NICKNAME_BUSY)
-                    .message("This nickname is busy, please enter another")
-                    .httpStatus(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
+
+        checkNickNameUserIfExist(nickname);
+
         String accessToken = UUID.randomUUID()
                 .toString()
                 .replace("-", "") + System.currentTimeMillis();
@@ -53,5 +49,15 @@ public class HomeNotesService {
                         .accessToken(accessToken)
                         .build())
                 .build(), HttpStatus.OK);
+    }
+
+    private void checkNickNameUserIfExist(String nickname) {
+        if (userDao.existsUserByNicknameLike(nickname)) {
+            throw CommonException.builder()
+                    .code(Code.NICKNAME_BUSY)
+                    .message("This nickname is busy, please enter another")
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
     }
 }

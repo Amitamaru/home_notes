@@ -15,6 +15,7 @@ public class HomeNotesErrorHandler {
 
     @ExceptionHandler(CommonException.class)
     public ResponseEntity<ErrorResponse> handleCommonException(CommonException e) {
+        log.error("CommonException: {}", e.toString());
         return new ResponseEntity<>(ErrorResponse.builder()
                 .error(Error.builder()
                         .code(e.getCode())

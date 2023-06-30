@@ -18,6 +18,4 @@ public enum Code {
     NOT_BLOCK_YOURSELF,
     BLOCKED,
 
-    TEST
-
 }

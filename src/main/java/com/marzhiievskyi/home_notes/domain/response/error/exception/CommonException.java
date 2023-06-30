@@ -2,11 +2,13 @@ package com.marzhiievskyi.home_notes.domain.response.error.exception;
 
 import com.marzhiievskyi.home_notes.domain.constants.Code;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 
-@Data
+@Getter
+@Setter
 @Builder
 public class CommonException extends RuntimeException{
 

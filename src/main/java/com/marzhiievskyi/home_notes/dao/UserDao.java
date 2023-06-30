@@ -2,10 +2,13 @@ package com.marzhiievskyi.home_notes.dao;
 
 import com.marzhiievskyi.home_notes.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDao extends JpaRepository<User, Long>{
 
-    Boolean existsUserLikeNickname(String nickname);
+    @Query("select (count(u) > 0) from User u where u.nickname like :nickname")
+    Boolean existsUserByNicknameLike(@Param("nickname") String nickname);
 }
