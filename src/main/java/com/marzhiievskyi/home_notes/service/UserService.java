@@ -10,36 +10,37 @@ import com.marzhiievskyi.home_notes.domain.model.User;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
-import com.marzhiievskyi.home_notes.util.ValidationUtil;
+import com.marzhiievskyi.home_notes.util.EncryptUtils;
+import com.marzhiievskyi.home_notes.util.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class HomeNotesService {
+public class UserService {
 
-    private final ValidationUtil validationUtil;
+    private final ValidationUtils validationUtils;
+    private final EncryptUtils encryptUtils;
 
     private final UserDao userDao;
 
 
     public ResponseEntity<Response> registration(RegistrationRequestUserDto registerRequest) {
 
-        validationUtil.validationRequest(registerRequest);
+        validationUtils.validationRequest(registerRequest);
 
-        String nickname = registerRequest.getNickname();
+        String nickname = registerRequest.getAuthorization().getNickname();
 
         checkNicknameUserIfExist(nickname);
 
         String accessToken = UUID.randomUUID()
                 .toString()
                 .replace("-", "") + System.currentTimeMillis();
-        String encryptedPassword = DigestUtils.md5DigestAsHex(registerRequest.getPassword().getBytes());
+        String encryptedPassword = encryptUtils.encryptPassword(registerRequest.getAuthorization().getPassword());
         userDao.save(User.builder()
                 .nickname(nickname)
                 .accessToken(accessToken)
@@ -64,11 +65,11 @@ public class HomeNotesService {
 
     public ResponseEntity<Response> login(LoginRequestUserDto loginRequest) {
 
-        validationUtil.validationRequest(loginRequest);
+        validationUtils.validationRequest(loginRequest);
 
-        String encryptedPassword = DigestUtils.md5DigestAsHex(loginRequest.getPassword().getBytes());
+        String encryptedPassword = encryptUtils.encryptPassword(loginRequest.getAuthorization().getPassword());
 
-        String accessToken = userDao.getAccessToken(loginRequest.getNickname(), encryptedPassword);
+        String accessToken = userDao.getAccessToken(loginRequest.getAuthorization().getNickname(), encryptedPassword);
 
         if (accessToken != null) {
             return new ResponseEntity<>(SuccessResponse.builder()

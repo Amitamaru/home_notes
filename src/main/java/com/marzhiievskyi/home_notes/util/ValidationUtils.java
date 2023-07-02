@@ -14,7 +14,7 @@ import java.util.Set;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ValidationUtil {
+public class ValidationUtils {
 
     private final Validator validator;
 
