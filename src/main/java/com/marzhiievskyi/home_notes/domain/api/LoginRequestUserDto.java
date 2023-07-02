@@ -1,6 +1,5 @@
 package com.marzhiievskyi.home_notes.domain.api;
 
-
 import com.marzhiievskyi.home_notes.domain.constants.RegExp;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -13,7 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistrationRequestUserDto {
+public class LoginRequestUserDto {
+
 
     @NotBlank(message = "nickname must be filled")
     @Pattern(regexp = RegExp.nickname, message = "incorrect nickname")

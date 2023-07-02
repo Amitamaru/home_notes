@@ -1,5 +1,6 @@
 package com.marzhiievskyi.home_notes.controller;
 
+import com.marzhiievskyi.home_notes.domain.api.LoginRequestUserDto;
 import com.marzhiievskyi.home_notes.domain.api.RegistrationRequestUserDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.service.HomeNotesService;
@@ -24,10 +25,20 @@ public class Controller {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<Response> testMethod(@RequestBody final RegistrationRequestUserDto registerRequest) {
+    public ResponseEntity<Response> registrationNewUser(@RequestBody final RegistrationRequestUserDto registerRequest) {
         log.info("START endpoint registration, request: {}", registerRequest);
         ResponseEntity<Response> response = homeNotesService.registration(registerRequest);
         log.info("END endpoint registration, response: {}", response);
         return response;
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Response> loginUser(@RequestBody final LoginRequestUserDto loginRequest) {
+        log.info("START endpoint login, request: {}", loginRequest);
+        ResponseEntity<Response> response = homeNotesService.login(loginRequest);
+        log.info("END endpoint login, response: {}", response);
+        return response;
+
+    }
+
 }
