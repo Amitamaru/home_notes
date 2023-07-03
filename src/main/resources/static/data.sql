@@ -1,4 +1,4 @@
-CREATE TABLE home_notes.user
+CREATE TABLE home_notes.userDto
 (
     id           BIGINT AUTO_INCREMENT,
     nickname     VARCHAR(15)  NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE home_notes.note
     text        VARCHAR(140) NOT NULL,
     time_insert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES user (id)
+    FOREIGN KEY (user_id) REFERENCES userDto (id)
 ) COLLATE UTF8MB4_bin;
 
 CREATE TABLE home_notes.tag

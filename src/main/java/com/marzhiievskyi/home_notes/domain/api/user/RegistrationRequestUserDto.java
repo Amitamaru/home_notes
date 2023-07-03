@@ -1,4 +1,4 @@
-package com.marzhiievskyi.home_notes.domain.api;
+package com.marzhiievskyi.home_notes.domain.api.user;
 
 
 import jakarta.validation.Valid;

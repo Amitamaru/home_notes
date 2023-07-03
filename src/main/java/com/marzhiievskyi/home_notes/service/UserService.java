@@ -1,12 +1,12 @@
 package com.marzhiievskyi.home_notes.service;
 
-import com.marzhiievskyi.home_notes.dao.UserDao;
-import com.marzhiievskyi.home_notes.domain.api.LoginRequestUserDto;
-import com.marzhiievskyi.home_notes.domain.api.LoginResponseUserDto;
-import com.marzhiievskyi.home_notes.domain.api.RegistrationRequestUserDto;
-import com.marzhiievskyi.home_notes.domain.api.RegistrationResponseUserDto;
+import com.marzhiievskyi.home_notes.dao.DaoImpl;
+import com.marzhiievskyi.home_notes.domain.api.note.PublicRequestNoteDto;
+import com.marzhiievskyi.home_notes.domain.api.user.LoginRequestUserDto;
+import com.marzhiievskyi.home_notes.domain.api.user.RegistrationRequestUserDto;
+import com.marzhiievskyi.home_notes.domain.api.user.RegistrationResponseUserDto;
+import com.marzhiievskyi.home_notes.domain.api.user.UserDto;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
-import com.marzhiievskyi.home_notes.domain.model.User;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
@@ -25,9 +25,7 @@ public class UserService {
 
     private final ValidationUtils validationUtils;
     private final EncryptUtils encryptUtils;
-
-    private final UserDao userDao;
-
+    private final DaoImpl dao;
 
     public ResponseEntity<Response> registration(RegistrationRequestUserDto registerRequest) {
 
@@ -35,17 +33,23 @@ public class UserService {
 
         String nickname = registerRequest.getAuthorization().getNickname();
 
-        checkNicknameUserIfExist(nickname);
+        if (dao.isExistNickname(nickname)) {
+            throw CommonException.builder()
+                    .code(Code.NICKNAME_BUSY)
+                    .message("this nickname is busy please enter another")
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
 
-        String accessToken = UUID.randomUUID()
-                .toString()
-                .replace("-", "") + System.currentTimeMillis();
+        String accessToken = UUID.randomUUID().toString().replace("-", "") + System.currentTimeMillis();
         String encryptedPassword = encryptUtils.encryptPassword(registerRequest.getAuthorization().getPassword());
-        userDao.save(User.builder()
+
+        dao.insertNewUser(UserDto.builder()
                 .nickname(nickname)
                 .accessToken(accessToken)
-                .password(encryptedPassword)
+                .encryptedPassword(encryptedPassword)
                 .build());
+
         return new ResponseEntity<>(SuccessResponse.builder()
                 .data(RegistrationResponseUserDto.builder()
                         .accessToken(accessToken)
@@ -53,15 +57,6 @@ public class UserService {
                 .build(), HttpStatus.OK);
     }
 
-    private void checkNicknameUserIfExist(String nickname) {
-        if (userDao.existsUserByNicknameLike(nickname)) {
-            throw CommonException.builder()
-                    .code(Code.NICKNAME_BUSY)
-                    .message("This nickname is busy, please enter another")
-                    .httpStatus(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
-    }
 
     public ResponseEntity<Response> login(LoginRequestUserDto loginRequest) {
 
@@ -69,20 +64,21 @@ public class UserService {
 
         String encryptedPassword = encryptUtils.encryptPassword(loginRequest.getAuthorization().getPassword());
 
-        String accessToken = userDao.getAccessToken(loginRequest.getAuthorization().getNickname(), encryptedPassword);
-
-        if (accessToken != null) {
-            return new ResponseEntity<>(SuccessResponse.builder()
-                    .data(LoginResponseUserDto.builder()
-                            .accessToken(accessToken)
-                            .build())
-                    .build(), HttpStatus.OK);
-        } else {
-            throw CommonException.builder()
-                    .code(Code.USER_NOT_FOUND)
-                    .message("user not found")
-                    .httpStatus(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
+        String accessToken = dao.getAccessTokenIfExist(UserDto.builder()
+                .nickname(loginRequest.getAuthorization().getNickname())
+                .encryptedPassword(encryptedPassword)
+                .build());
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(accessToken)
+                .build(), HttpStatus.OK);
     }
+
+    public ResponseEntity<Response> publicNote(PublicRequestNoteDto publicRequestNote, String accessToken) {
+
+        validationUtils.validationRequest(publicRequestNote);
+
+        //TODO public note!
+        return null;
+    }
+
 }

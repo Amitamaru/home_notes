@@ -1,4 +1,4 @@
-package com.marzhiievskyi.home_notes.domain.api;
+package com.marzhiievskyi.home_notes.domain.api.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistrationResponseUserDto {
+public class LoginResponseUserDto {
 
     private String accessToken;
 }

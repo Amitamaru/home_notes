@@ -1,7 +1,8 @@
 package com.marzhiievskyi.home_notes.controller;
 
-import com.marzhiievskyi.home_notes.domain.api.LoginRequestUserDto;
-import com.marzhiievskyi.home_notes.domain.api.RegistrationRequestUserDto;
+import com.marzhiievskyi.home_notes.domain.api.note.PublicRequestNoteDto;
+import com.marzhiievskyi.home_notes.domain.api.user.LoginRequestUserDto;
+import com.marzhiievskyi.home_notes.domain.api.user.RegistrationRequestUserDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,14 @@ public class Controller {
         ResponseEntity<Response> response = userService.login(loginRequest);
         log.info("END endpoint login, response: {}", response);
         return response;
-
     }
-
+    @PostMapping("/publicNote")
+    public ResponseEntity<Response> publicNote(
+            @RequestHeader final String accessToken,
+            @RequestBody final PublicRequestNoteDto publicRequestNote) {
+        log.info("START endpoint publicNote, accessToken: {}, request {}", accessToken, publicRequestNote);
+        ResponseEntity<Response> response = userService.publicNote(publicRequestNote, accessToken);
+        log.info("END endpoint, response: {}", response);
+        return response;
+    }
 }
