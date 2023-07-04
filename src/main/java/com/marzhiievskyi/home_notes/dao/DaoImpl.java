@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Repository
@@ -62,8 +63,42 @@ public class DaoImpl extends JdbcDaoSupport implements Dao {
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .build();
         }
+    }
 
+    @Override
+    public Long getUserIdByAccessToken(String token) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT id from user where access_token = ?", Long.class, token);
 
+        } catch (EmptyResultDataAccessException exception) {
+            log.error(exception.toString());
+            throw CommonException.builder()
+                    .code(Code.AUTHORIZATION_ERROR)
+                    .message("error of authorization")
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+    }
+
+    @Override
+    public Long addNoteByUserId(String noteText, Long userId) {
+        jdbcTemplate.update("INSERT INTO note (user_id, text) VALUES (?, ?);", userId, noteText);
+        return jdbcTemplate.queryForObject("SELECT id FROM note WHERE id = LAST_INSERT_ID();", Long.class);
+    }
+
+    @Override
+    public void addTag(String tagText) {
+        jdbcTemplate.update("INSERT INTO tag(text) SELECT DISTINCT LOWER(?) FROM tag WHERE NOT EXISTS (SELECT text FROM tag WHERE text = LOWER(?));", tagText, tagText);
+    }
+
+    @Override
+    public void addNoteTag(Long noteId, String tag) {
+        jdbcTemplate.update("INSERT IGNORE INTO note_tag(note_id, tag_id) VALUES (?, (SELECT id FROM tag WHERE text = LOWER(?)));", noteId, tag);
+    }
+
+    @Override
+    public LocalDateTime getTimeInsertNote(Long noteId) {
+        return jdbcTemplate.queryForObject("SELECT time_insert FROM note where id = ?;", LocalDateTime.class, noteId);
     }
 
 

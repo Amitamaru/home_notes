@@ -3,6 +3,8 @@ package com.marzhiievskyi.home_notes.dao;
 import com.marzhiievskyi.home_notes.domain.api.user.UserDto;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public interface Dao {
 
@@ -11,4 +13,14 @@ public interface Dao {
     void insertNewUser(UserDto userDto);
 
     String getAccessTokenIfExist(UserDto userDto);
+
+    Long getUserIdByAccessToken(String token);
+
+    Long addNoteByUserId(String noteText, Long userId);
+
+    void addTag(String tagText);
+
+    void addNoteTag(Long noteId, String tag);
+
+    LocalDateTime getTimeInsertNote(Long noteId);
 }

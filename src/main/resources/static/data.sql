@@ -1,4 +1,6 @@
-CREATE TABLE home_notes.userDto
+CREATE SCHEMA IF NOT EXISTS home_notes;
+
+CREATE TABLE home_notes.user
 (
     id           BIGINT AUTO_INCREMENT,
     nickname     VARCHAR(15)  NOT NULL,
@@ -17,7 +19,7 @@ CREATE TABLE home_notes.note
     text        VARCHAR(140) NOT NULL,
     time_insert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES userDto (id)
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COLLATE UTF8MB4_bin;
 
 CREATE TABLE home_notes.tag
@@ -28,6 +30,7 @@ CREATE TABLE home_notes.tag
     PRIMARY KEY (`id`),
     UNIQUE (text)
 ) COLLATE UTF8MB4_bin;
+INSERT INTO tag(text) VALUE ('mustBe=)');
 
 CREATE TABLE home_notes.note_tag
 (
@@ -36,7 +39,7 @@ CREATE TABLE home_notes.note_tag
     tag_id      BIGINT NOT NULL,
     time_insert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    FOREIGN KEY (note_id) REFERENCES note (id),
-    FOREIGN KEY (tag_id) REFERENCES tag (id),
+    FOREIGN KEY (note_id) REFERENCES note (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE `phrase_id_tag_id` (`note_id`, `tag_id`)
 ) COLLATE UTF8MB4_bin;
