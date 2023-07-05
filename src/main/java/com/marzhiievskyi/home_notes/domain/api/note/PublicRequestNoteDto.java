@@ -18,12 +18,12 @@ import java.util.List;
 public class PublicRequestNoteDto {
 
     @NotBlank(message = "authorization must be filled")
-    @Pattern(regexp = RegExp.note, message = "incorrect text")
+    @Pattern(regexp = RegExp.note, message = "incorrect note text")
     private String text;
 
     @Size(max = 5, message = "count of tags must be less than 5")
     private List<
             @NotBlank(message = "tag must be filled")
-            @Pattern(regexp = RegExp.tag, message = "incorrect tag")
+            @Pattern(regexp = RegExp.tag, message = "incorrect tag text")
                     String> tags;
 }
