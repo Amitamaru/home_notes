@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PublicRequestNoteDto {
 
-    @NotBlank(message = "authorization must be filled")
+    @NotBlank(message = "note text must be filled")
     @Pattern(regexp = RegExp.note, message = "incorrect note text")
     private String text;
 
