@@ -1,5 +1,7 @@
 package com.marzhiievskyi.home_notes.dao;
 
+import com.marzhiievskyi.home_notes.domain.api.common.NoteRowMapper;
+import com.marzhiievskyi.home_notes.domain.api.note.NoteDto;
 import com.marzhiievskyi.home_notes.domain.api.user.UserDto;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
 import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -101,5 +104,13 @@ public class DaoImpl extends JdbcDaoSupport implements Dao {
         return jdbcTemplate.queryForObject("SELECT time_insert FROM note where id = ?;", LocalDateTime.class, noteId);
     }
 
+    @Override
+    public List<NoteDto> getNotesByUserId(Long userId) {
+        return jdbcTemplate.query("SElECT * FROM note WHERE user_id = ? ORDER BY time_insert DESC", new NoteRowMapper(), userId);
+    }
 
+    @Override
+    public List<String> getTagsByNoteId(Long noteId) {
+        return jdbcTemplate.queryForList("SELECT text FROM tag WHERE id IN (SELECT tag_id FROM note_tag WHERE note_id = ?)", String.class, noteId);
+    }
 }

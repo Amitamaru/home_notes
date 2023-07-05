@@ -1,8 +1,10 @@
 package com.marzhiievskyi.home_notes.service;
 
 import com.marzhiievskyi.home_notes.dao.DaoImpl;
+import com.marzhiievskyi.home_notes.domain.api.note.ResponseListNotes;
+import com.marzhiievskyi.home_notes.domain.api.note.NoteDto;
 import com.marzhiievskyi.home_notes.domain.api.note.PublicRequestNoteDto;
-import com.marzhiievskyi.home_notes.domain.api.note.PublicResponseNoteDto;
+import com.marzhiievskyi.home_notes.domain.api.note.ResponseNoteDto;
 import com.marzhiievskyi.home_notes.domain.api.user.LoginRequestUserDto;
 import com.marzhiievskyi.home_notes.domain.api.user.RegistrationRequestUserDto;
 import com.marzhiievskyi.home_notes.domain.api.user.RegistrationResponseUserDto;
@@ -20,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -91,12 +95,37 @@ public class UserService {
         }
 
         return new ResponseEntity<>(SuccessResponse.builder()
-                .data(PublicResponseNoteDto.builder()
+                .data(ResponseNoteDto.builder()
+                        .id(noteId)
                         .text(publicRequestNote.getText())
                         .tags(publicRequestNote.getTags())
-                        .time(timeInsertNote)
+                        .timeInsert(timeInsertNote.toString())
                         .build())
                 .build(), HttpStatus.OK);
     }
 
+    public ResponseEntity<Response> getUserNotes(String accessToken) {
+
+        Long userId = dao.getUserIdByAccessToken(accessToken);
+        List<NoteDto> notesByUserId = dao.getNotesByUserId(userId);
+
+        List<ResponseNoteDto> responseNotes = new ArrayList<>();
+        for (NoteDto note : notesByUserId) {
+
+            List<String> tagsByNoteId = dao.getTagsByNoteId(note.getId());
+
+            responseNotes.add(ResponseNoteDto.builder()
+                    .id(note.getId())
+                    .text(note.getText())
+                    .timeInsert(note.getTimeInsert())
+                    .tags(tagsByNoteId)
+                    .build());
+        }
+
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(ResponseListNotes.builder()
+                        .notes(responseNotes)
+                        .build())
+                .build(), HttpStatus.OK);
+    }
 }

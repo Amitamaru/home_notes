@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PublicResponseNoteDto {
+public class ResponseNoteDto {
 
+    private Long id;
     private String text;
     private List<String> tags;
-    private LocalDateTime time;
+    private String timeInsert;
 }

@@ -6,6 +6,7 @@ import com.marzhiievskyi.home_notes.domain.response.error.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -19,11 +20,10 @@ public class HomeNotesErrorHandler {
         return new ResponseEntity<>(ErrorResponse.builder()
                 .error(Error.builder()
                         .code(e.getCode())
-                        .message(e.getMessage())
+                        .userMessage(e.getMessage())
                         .build())
                 .build(), e.getHttpStatus());
     }
-
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedErrorException(Exception e) {
@@ -32,8 +32,19 @@ public class HomeNotesErrorHandler {
         return new ResponseEntity<>(ErrorResponse.builder()
                 .error(Error.builder()
                         .code(Code.INTERNAL_SERVER_ERROR)
-                        .message("Internal server error.")
+                        .userMessage("Internal server error.")
                         .build())
                 .build(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException e) {
+        log.error("MissingRequestHeaderException: {}", e.toString());
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .error(Error.builder()
+                        .code(Code.MISSING_REQUEST_HEADER)
+                        .techMessage(e.getMessage())
+                        .build())
+                .build(), HttpStatus.BAD_REQUEST);
     }
 }

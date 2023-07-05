@@ -18,9 +18,9 @@ public class Controller {
 
     private final UserService userService;
 
-    @GetMapping("/hello")
+    @GetMapping("/version")
     public String hello() {
-        String hello = "Welcome to home notes. version 1.0.0";
+        String hello = "Welcome to home notes. version 1.0.0 (BETA)";
         log.info(hello);
         return hello;
     }
@@ -47,6 +47,13 @@ public class Controller {
         log.info("START endpoint publicNote, accessToken: {}, request {}", accessToken, publicRequestNote);
         ResponseEntity<Response> response = userService.publicNote(publicRequestNote, accessToken);
         log.info("END endpoint, response: {}", response);
+        return response;
+    }
+    @GetMapping("/getMyNotes")
+    public ResponseEntity<Response> getUserNotes(@RequestHeader String accessToken) {
+        log.info("START endpoint getUserNotes, accessToken: {}", accessToken);
+        ResponseEntity<Response> response = userService.getUserNotes(accessToken);
+        log.info("END endpoint getUserNotes, response: {}", response);
         return response;
     }
 }
