@@ -1,8 +1,9 @@
-package com.marzhiievskyi.home_notes.dao;
+package com.marzhiievskyi.home_notes.dao.implementation;
 
-import com.marzhiievskyi.home_notes.domain.api.common.NoteRowMapper;
-import com.marzhiievskyi.home_notes.domain.api.note.NoteDto;
-import com.marzhiievskyi.home_notes.domain.api.user.UserDto;
+import com.marzhiievskyi.home_notes.dao.UserDao;
+import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseRowMapper;
+import com.marzhiievskyi.home_notes.domain.api.common.UserDto;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
 import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
 import jakarta.annotation.PostConstruct;
@@ -16,14 +17,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
 @Repository
 @Transactional
 @RequiredArgsConstructor
-public class DaoImpl extends JdbcDaoSupport implements Dao {
+public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
 
     private final DataSource dataSource;
@@ -100,13 +100,11 @@ public class DaoImpl extends JdbcDaoSupport implements Dao {
     }
 
     @Override
-    public LocalDateTime getTimeInsertNote(Long noteId) {
-        return jdbcTemplate.queryForObject("SELECT time_insert FROM note where id = ?;", LocalDateTime.class, noteId);
-    }
-
-    @Override
-    public List<NoteDto> getNotesByUserId(Long userId) {
-        return jdbcTemplate.query("SElECT * FROM note WHERE user_id = ? ORDER BY time_insert DESC", new NoteRowMapper(), userId);
+    public List<NoteResponseDto> getNotesByUserId(Long userId) {
+        return jdbcTemplate.query(  "SELECT note.id AS note_id, u.id AS user_id, u.nickname, note.text, note.time_insert " +
+                                        "FROM note JOIN user u on note.user_id = u.id " +
+                                        "WHERE user_id = ? " +
+                                        "ORDER BY time_insert DESC ", new NoteResponseRowMapper(), userId);
     }
 
     @Override

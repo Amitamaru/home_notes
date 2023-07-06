@@ -1,4 +1,4 @@
-package com.marzhiievskyi.home_notes.domain.api.user;
+package com.marzhiievskyi.home_notes.domain.api.user.common;
 
 import com.marzhiievskyi.home_notes.domain.constants.RegExp;
 import jakarta.validation.constraints.NotBlank;

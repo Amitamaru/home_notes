@@ -1,6 +1,7 @@
-package com.marzhiievskyi.home_notes.domain.api.user;
+package com.marzhiievskyi.home_notes.domain.api.user.registration;
 
 
+import com.marzhiievskyi.home_notes.domain.api.user.common.Authorization;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

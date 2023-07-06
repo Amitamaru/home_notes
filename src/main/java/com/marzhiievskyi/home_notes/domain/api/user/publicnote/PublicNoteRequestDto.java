@@ -1,4 +1,4 @@
-package com.marzhiievskyi.home_notes.domain.api.note;
+package com.marzhiievskyi.home_notes.domain.api.user.publicnote;
 
 import com.marzhiievskyi.home_notes.domain.constants.RegExp;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PublicRequestNoteDto {
+public class PublicNoteRequestDto {
 
     @NotBlank(message = "note text must be filled")
     @Pattern(regexp = RegExp.note, message = "incorrect note text")

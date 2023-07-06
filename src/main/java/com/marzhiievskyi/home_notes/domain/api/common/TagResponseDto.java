@@ -1,20 +1,17 @@
-package com.marzhiievskyi.home_notes.domain.api.note;
+package com.marzhiievskyi.home_notes.domain.api.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseNoteDto {
+public class TagResponseDto {
 
-    private Long id;
+    private Long tagId;
+
     private String text;
-    private List<String> tags;
-    private String timeInsert;
 }

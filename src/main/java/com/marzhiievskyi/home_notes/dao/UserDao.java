@@ -1,14 +1,13 @@
 package com.marzhiievskyi.home_notes.dao;
 
-import com.marzhiievskyi.home_notes.domain.api.note.NoteDto;
-import com.marzhiievskyi.home_notes.domain.api.user.UserDto;
+import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.common.UserDto;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public interface Dao {
+public interface UserDao {
 
     Boolean isExistNickname(String nickname);
 
@@ -24,9 +23,7 @@ public interface Dao {
 
     void addNoteTag(Long noteId, String tag);
 
-    LocalDateTime getTimeInsertNote(Long noteId);
-
-    List<NoteDto> getNotesByUserId(Long userId);
+    List<NoteResponseDto> getNotesByUserId(Long userId);
 
     List<String> getTagsByNoteId(Long noteId);
 }

@@ -1,17 +1,15 @@
-package com.marzhiievskyi.home_notes.domain.api.note;
+package com.marzhiievskyi.home_notes.domain.api.user.registration;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseListNotes {
+public class RegistrationResponseUserDto {
 
-    private List<ResponseNoteDto> notes;
+    private String accessToken;
 }

@@ -1,14 +1,13 @@
 package com.marzhiievskyi.home_notes.service;
 
-import com.marzhiievskyi.home_notes.dao.DaoImpl;
-import com.marzhiievskyi.home_notes.domain.api.note.ResponseListNotes;
-import com.marzhiievskyi.home_notes.domain.api.note.NoteDto;
-import com.marzhiievskyi.home_notes.domain.api.note.PublicRequestNoteDto;
-import com.marzhiievskyi.home_notes.domain.api.note.ResponseNoteDto;
-import com.marzhiievskyi.home_notes.domain.api.user.LoginRequestUserDto;
-import com.marzhiievskyi.home_notes.domain.api.user.RegistrationRequestUserDto;
-import com.marzhiievskyi.home_notes.domain.api.user.RegistrationResponseUserDto;
-import com.marzhiievskyi.home_notes.domain.api.user.UserDto;
+import com.marzhiievskyi.home_notes.dao.implementation.UserDaoImpl;
+import com.marzhiievskyi.home_notes.domain.api.common.NoteListResponse;
+import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.user.publicnote.PublicNoteRequestDto;
+import com.marzhiievskyi.home_notes.domain.api.user.login.LoginRequestUserDto;
+import com.marzhiievskyi.home_notes.domain.api.user.registration.RegistrationRequestUserDto;
+import com.marzhiievskyi.home_notes.domain.api.user.registration.RegistrationResponseUserDto;
+import com.marzhiievskyi.home_notes.domain.api.common.UserDto;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
@@ -21,10 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -33,14 +29,16 @@ public class UserService {
 
     private final ValidationUtils validationUtils;
     private final EncryptUtils encryptUtils;
-    private final DaoImpl dao;
+    private final UserDaoImpl userDao;
+    private final SearchService searchService;
+
 
     public ResponseEntity<Response> registration(RegistrationRequestUserDto registerRequest) {
 
         validationUtils.validationRequest(registerRequest);
 
         String nickname = registerRequest.getAuthorization().getNickname();
-        if (dao.isExistNickname(nickname)) {
+        if (userDao.isExistNickname(nickname)) {
             throw CommonException.builder()
                     .code(Code.NICKNAME_BUSY)
                     .message("this nickname is busy please enter another")
@@ -48,10 +46,10 @@ public class UserService {
                     .build();
         }
 
-        String accessToken = UUID.randomUUID().toString().replace("-", "") + System.currentTimeMillis();
+        String accessToken = encryptUtils.generateAccessToken();
         String encryptedPassword = encryptUtils.encryptPassword(registerRequest.getAuthorization().getPassword());
 
-        dao.insertNewUser(UserDto.builder()
+        userDao.insertNewUser(UserDto.builder()
                 .nickname(nickname)
                 .accessToken(accessToken)
                 .encryptedPassword(encryptedPassword)
@@ -70,7 +68,7 @@ public class UserService {
         validationUtils.validationRequest(loginRequest);
 
         String encryptedPassword = encryptUtils.encryptPassword(loginRequest.getAuthorization().getPassword());
-        String accessToken = dao.getAccessTokenIfExist(UserDto.builder()
+        String accessToken = userDao.getAccessTokenIfExist(UserDto.builder()
                 .nickname(loginRequest.getAuthorization().getNickname())
                 .encryptedPassword(encryptedPassword)
                 .build());
@@ -80,51 +78,35 @@ public class UserService {
                 .build(), HttpStatus.OK);
     }
 
-    public ResponseEntity<Response> publicNote(PublicRequestNoteDto publicRequestNote, String accessToken) {
+    public ResponseEntity<Response> publicNote(PublicNoteRequestDto publicRequestNote, String accessToken) {
 
         validationUtils.validationRequest(publicRequestNote);
 
-        Long userId = dao.getUserIdByAccessToken(accessToken);
-        Long noteId = dao.addNoteByUserId(publicRequestNote.getText(), userId);
-        LocalDateTime timeInsertNote = dao.getTimeInsertNote(noteId);
+        Long userId = userDao.getUserIdByAccessToken(accessToken);
+        Long noteId = userDao.addNoteByUserId(publicRequestNote.getText(), userId);
         log.info("userId: {}, noteId: {}", userId, noteId);
 
         for (String tag : publicRequestNote.getTags()) {
-            dao.addTag(tag);
-            dao.addNoteTag(noteId, tag);
+            userDao.addTag(tag);
+            userDao.addNoteTag(noteId, tag);
         }
 
         return new ResponseEntity<>(SuccessResponse.builder()
-                .data(ResponseNoteDto.builder()
-                        .id(noteId)
-                        .text(publicRequestNote.getText())
-                        .tags(publicRequestNote.getTags())
-                        .timeInsert(timeInsertNote.toString())
-                        .build())
                 .build(), HttpStatus.OK);
     }
 
     public ResponseEntity<Response> getUserNotes(String accessToken) {
 
-        Long userId = dao.getUserIdByAccessToken(accessToken);
-        List<NoteDto> notesByUserId = dao.getNotesByUserId(userId);
+        Long userId = userDao.getUserIdByAccessToken(accessToken);
+        List<NoteResponseDto> notesByUserId = userDao.getNotesByUserId(userId);
 
-        List<ResponseNoteDto> responseNotes = new ArrayList<>();
-        for (NoteDto note : notesByUserId) {
-
-            List<String> tagsByNoteId = dao.getTagsByNoteId(note.getId());
-
-            responseNotes.add(ResponseNoteDto.builder()
-                    .id(note.getId())
-                    .text(note.getText())
-                    .timeInsert(note.getTimeInsert())
-                    .tags(tagsByNoteId)
-                    .build());
+        for (NoteResponseDto note : notesByUserId) {
+            note.setTags(searchService.getTagsByNoteId(note.getNoteId()));
         }
 
         return new ResponseEntity<>(SuccessResponse.builder()
-                .data(ResponseListNotes.builder()
-                        .notes(responseNotes)
+                .data(NoteListResponse.builder()
+                        .notes(notesByUserId)
                         .build())
                 .build(), HttpStatus.OK);
     }

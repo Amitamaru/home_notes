@@ -1,4 +1,4 @@
-package com.marzhiievskyi.home_notes.domain.api.user;
+package com.marzhiievskyi.home_notes.domain.api.user.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
-
-    private String nickname;
-
-    private String encryptedPassword;
+public class LoginResponseUserDto {
 
     private String accessToken;
 }
