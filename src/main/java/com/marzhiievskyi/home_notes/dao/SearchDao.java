@@ -9,4 +9,6 @@ import java.util.List;
 public interface SearchDao {
     List<TagResponseDto> getTagsByNoteId(Long id);
 
+    List<TagResponseDto> getTagsByTagPart(String partTag);
+
 }

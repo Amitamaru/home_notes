@@ -38,4 +38,25 @@ public class SearchDaoImpl extends JdbcDaoSupport implements SearchDao {
             return null;
         }
     }
+
+    @Override
+    public List<TagResponseDto> getTagsByTagPart(String partTag) {
+        return jdbcTemplate.query("SELECT id, text " +
+                        "FROM ( SELECT tag.id, text, count(tag.id) " +
+                        "       FROM tag " +
+                        "           JOIN note_tag nt on tag.id = nt.tag_id " +
+                        "       WHERE text LIKE CONCAT (LOWER(?), '%') " +
+                        "       GROUP BY tag.id " +
+                        "       ORDER BY count(tag.id) DESC) t1 " +
+                        "UNION " +
+                        "SELECT id, text " +
+                        "FROM (" +
+                        "       SELECT tag.id, text, count(tag.id) " +
+                        "       FROM tag " +
+                        "           JOIN note_tag n on tag.id = n.tag_id " +
+                        "       WHERE text LIKE CONCAT('%_', LOWER(?), '%') " +
+                        "       GROUP BY tag.id " +
+                        "       ORDER BY count(tag.id) DESC ) t2",
+                new TagResponseRowMapper(), partTag, partTag);
+    }
 }

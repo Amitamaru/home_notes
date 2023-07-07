@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SearchTagsRequestDto {
 
-    @NotBlank(message = "part of tag must be filled ")
+    @NotBlank(message = "partOfTag must be filled ")
     @Pattern(regexp = RegExp.tag, message = "incorrect part of tag")
     private String partOfTag;
 }
