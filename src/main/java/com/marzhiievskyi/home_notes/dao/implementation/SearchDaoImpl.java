@@ -1,8 +1,11 @@
 package com.marzhiievskyi.home_notes.dao.implementation;
 
 import com.marzhiievskyi.home_notes.dao.SearchDao;
+import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseRowMapper;
 import com.marzhiievskyi.home_notes.domain.api.common.TagResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.common.TagResponseRowMapper;
+import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteRequestDto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,5 +61,14 @@ public class SearchDaoImpl extends JdbcDaoSupport implements SearchDao {
                         "       GROUP BY tag.id " +
                         "       ORDER BY count(tag.id) DESC ) t2",
                 new TagResponseRowMapper(), partTag, partTag);
+    }
+
+    @Override
+    public List<NoteResponseDto> getNotesByTag(SearchNoteRequestDto searchNoteRequestDto) {
+        return jdbcTemplate.query("SELECT note.id AS note_id, u.id AS user_id, u.nickname, note.text, note.time_insert " +
+                "FROM note " +
+                "       JOIN user u on note.user_id = u.id " +
+                "WHERE note.id IN (SELECT note_id FROM note_tag WHERE tag_id = ?) " +
+                "ORDER BY " + searchNoteRequestDto.getSort().getValue() + ";", new NoteResponseRowMapper(), searchNoteRequestDto.getTagId());
     }
 }

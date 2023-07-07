@@ -1,5 +1,6 @@
 package com.marzhiievskyi.home_notes.controller;
 
+import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.tag.SearchTagsRequestDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.service.SearchService;
@@ -23,6 +24,16 @@ public class SearchController {
         log.info("START endpoint searchTags, request: {}", searchTagRequest);
         ResponseEntity<Response> response = searchService.findTagsByPart(searchTagRequest, accessToken);
         log.info("END endpoint searchTag, response: {}", response);
+        return response;
+    }
+
+    @PostMapping("/searchNotesByTag")
+    public ResponseEntity<Response> searchNotesByTag(
+            @RequestHeader final String accessToken,
+            @RequestBody final SearchNoteRequestDto searchNoteRequestDto) {
+        log.info("START endpoint searchNotesByTag, request: {}", searchNoteRequestDto);
+        ResponseEntity<Response> response = searchService.findNotesByTag(searchNoteRequestDto, accessToken);
+        log.info("END endpoint searchNotesByTag, response: {}", response);
         return response;
     }
 }

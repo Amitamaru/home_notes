@@ -6,6 +6,7 @@ import com.marzhiievskyi.home_notes.domain.response.error.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +44,16 @@ public class HomeNotesErrorHandler {
         return new ResponseEntity<>(ErrorResponse.builder()
                 .error(Error.builder()
                         .code(Code.MISSING_REQUEST_HEADER)
+                        .techMessage(e.getMessage())
+                        .build())
+                .build(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        log.error("HttpMessageNotReadableException: {}", e.toString());
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .error(Error.builder()
+                        .code(Code.NOT_READABLE)
                         .techMessage(e.getMessage())
                         .build())
                 .build(), HttpStatus.BAD_REQUEST);
