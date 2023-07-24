@@ -134,7 +134,7 @@ status 400
 **incoming data**<br/>
 `AccessToken: d4a76068f5104f26975499d22bcd11cc1665995491673`<br/>
 
-**логика метода**<br/>
+**logic**<br/>
 service getting notes by user ID,<br/>
 getting tags by note ID,<br/>
 arranges notes by time from new to old and sends them to the user
