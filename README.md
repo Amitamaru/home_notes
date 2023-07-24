@@ -193,3 +193,43 @@ status 400
   }
 }
 ```
+## searchTags method (auth)
+**incoming data**<br/>
+`AccessToken: d4a76068f5104f26975499d22bcd11cc1665995491673`<br/>
+```json
+{
+  "partOfTag": "Jav"
+}
+```
+
+**validation**<br/>
+part of tag >= 3 symbols, <= 25 symbols,  allowed characters a-zA-Z0-9а-яА-Я.,:; _?!+=/'\"*(){}[]-
+
+**logic**<br/>
+service search by part of tag in table tag and returns tags and them ID<br/>
+at the begining shoul be tags who begins from input part of tag in descending order of popularity<br/>
+after that tags that do not begin with the partTag<br/>
+
+**outcoming data if access**<br/>
+status 200
+```json
+{
+  "data": {
+    "tags": [
+        {
+          "tagId": 13,
+          "text": "Java"
+        },
+        {
+          "tagId": 19,
+          "text": "Javadoc"
+        },
+        {
+          "tagId": 9,
+          "text": "JDBC"
+        }
+    ]
+  }
+}
+```
+
