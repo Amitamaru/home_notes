@@ -150,38 +150,38 @@ status 200
   "data": {
     "notes": [
       {
-        "noteId": 7,
-        "text": "I'm codding my new app",
-        "timeInsert": "2023-16-23 12:07:23",
+        "noteId": 18,
+        "userid": 1,
+        "nickname": "mamaKevina",
+        "text": "I'm codding my pet project",
         "tags": [
           {
             "tagId": 13,
             "text": "Java"
           },
           {
-            "tagId": 7,
-            "text": "Spring"
+            "tagId": 19,
+            "text": "Javadoc"
           },
           {
-            "tagId": 9,
-            "text": "JDBC"
+            "tagId": 29,
+            "text": "spring"
           }
-        ]
+        ],
+        "timeInsert": "2023-07-13 19:17:33"
       },
       {
-        "noteId": 32,
-        "text": "I'm still codding",
-        "timeInsert": "2023-06-21 11:42:13",
+        "noteId": 22,
+        "userid": 1,
+        "nickname": "mamaKevina",
+        "text": "I'm still learn",
         "tags": [
           {
             "tagId": 13,
             "text": "Java"
-          },
-          {
-            "tagId": 16,
-            "text": "codding late night"
           }
-        ]
+        ],
+        "timeInsert": "2023-07-06 20:06:44"
       }
     ]
   }
