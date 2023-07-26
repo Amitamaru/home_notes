@@ -15,7 +15,7 @@ public interface UserDao {
 
     String getAccessTokenIfExist(UserDto userDto);
 
-    Long getUserIdByAccessToken(String token);
+    Long findUserIdIByTokenOrThrowException(String token);
 
     Long addNoteByUserId(String noteText, Long userId);
 
@@ -25,5 +25,4 @@ public interface UserDao {
 
     List<NoteResponseDto> getNotesByUserId(Long userId);
 
-    List<String> getTagsByNoteId(Long noteId);
 }

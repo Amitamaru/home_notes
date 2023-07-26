@@ -1,6 +1,7 @@
 package com.marzhiievskyi.home_notes.controller;
 
-import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteRequestDto;
+import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteByTagRequestDto;
+import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNotesByWordRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.tag.SearchTagsRequestDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.service.SearchService;
@@ -30,10 +31,20 @@ public class SearchController {
     @PostMapping("/searchNotesByTag")
     public ResponseEntity<Response> searchNotesByTag(
             @RequestHeader final String accessToken,
-            @RequestBody final SearchNoteRequestDto searchNoteRequestDto) {
-        log.info("START endpoint searchNotesByTag, request: {}", searchNoteRequestDto);
-        ResponseEntity<Response> response = searchService.findNotesByTag(searchNoteRequestDto, accessToken);
+            @RequestBody final SearchNoteByTagRequestDto searchNoteByTagRequestDto) {
+        log.info("START endpoint searchNotesByTag, request: {}", searchNoteByTagRequestDto);
+        ResponseEntity<Response> response = searchService.findNotesByTag(searchNoteByTagRequestDto, accessToken);
         log.info("END endpoint searchNotesByTag, response: {}", response);
+        return response;
+    }
+
+    @PostMapping("/searchNotesByPartWord")
+    public ResponseEntity<Response> searchNotesByPartWord(
+            @RequestHeader final String accessToken,
+            @RequestBody final SearchNotesByWordRequestDto searchNotesByWordRequestDto) {
+        log.info("START endpoint searchNotesByPartWord, request: {}", searchNotesByWordRequestDto);
+        ResponseEntity<Response> response = searchService.findNotesByPartWord(searchNotesByWordRequestDto, accessToken);
+        log.info("END endpoint searchNotesByPartWord, response: {}", response);
         return response;
     }
 }

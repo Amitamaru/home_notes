@@ -10,7 +10,7 @@ import java.util.UUID;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EncryptUtils {
+public class EncryptProcessor {
 
     public String encryptPassword(String password) {
         return DigestUtils.md5DigestAsHex(password.getBytes());

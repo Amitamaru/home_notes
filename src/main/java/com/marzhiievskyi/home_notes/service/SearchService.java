@@ -5,12 +5,14 @@ import com.marzhiievskyi.home_notes.dao.UserDao;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteListResponse;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.common.TagResponseDto;
-import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteRequestDto;
+import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteByTagRequestDto;
+import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNotesByWordRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.tag.SearchTagResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.search.tag.SearchTagsRequestDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
-import com.marzhiievskyi.home_notes.util.ValidationUtils;
+import com.marzhiievskyi.home_notes.service.common.CommonService;
+import com.marzhiievskyi.home_notes.util.ValidationProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,8 @@ public class SearchService {
 
     private final SearchDao searchDao;
     private final UserDao userDao;
-    private final ValidationUtils validationUtils;
+    private final ValidationProcessor validationProcessor;
+    private final CommonService commonService;
 
     public List<TagResponseDto> getTagsByNoteId(Long noteId) {
         return searchDao.getTagsByNoteId(noteId);
@@ -34,8 +37,8 @@ public class SearchService {
 
     public ResponseEntity<Response> findTagsByPart(SearchTagsRequestDto searchTagRequest, String accessToken) {
 
-        validationUtils.validationRequest(searchTagRequest);
-        userDao.getUserIdByAccessToken(accessToken);
+        validationProcessor.validationRequest(searchTagRequest);
+        userDao.findUserIdIByTokenOrThrowException(accessToken);
 
         List<TagResponseDto> tagsByTagPart = searchDao.getTagsByTagPart(searchTagRequest.getPartOfTag());
 
@@ -46,20 +49,32 @@ public class SearchService {
                 .build(), HttpStatus.OK);
     }
 
-    public ResponseEntity<Response> findNotesByTag(SearchNoteRequestDto searchNoteRequestDto, String accessToken) {
+    public ResponseEntity<Response> findNotesByTag(SearchNoteByTagRequestDto searchNotesRequest, String accessToken) {
 
-        validationUtils.validationRequest(searchNoteRequestDto);
-        userDao.getUserIdByAccessToken(accessToken);
+        validationProcessor.validationRequest(searchNotesRequest);
+        userDao.findUserIdIByTokenOrThrowException(accessToken);
 
-        List<NoteResponseDto> notesByTag = searchDao.getNotesByTag(searchNoteRequestDto);
-        for (NoteResponseDto note: notesByTag) {
-            List<TagResponseDto> tagsByNoteId = searchDao.getTagsByNoteId(note.getNoteId());
-            note.setTags(tagsByNoteId);
-        }
+        List<NoteResponseDto> notesByTag = searchDao.getNotesByTag(searchNotesRequest);
+        commonService.insertDataIntoNotes(notesByTag);
 
         return new ResponseEntity<>(SuccessResponse.builder()
                 .data(NoteListResponse.builder()
                         .notes(notesByTag)
+                        .build())
+                .build(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Response> findNotesByPartWord(SearchNotesByWordRequestDto searchNotesRequest, String accessToken) {
+
+        validationProcessor.validationRequest(searchNotesRequest);
+        userDao.findUserIdIByTokenOrThrowException(accessToken);
+
+        List<NoteResponseDto> notesByPartWord = searchDao.findNotesByPartWord(searchNotesRequest);
+        commonService.insertDataIntoNotes(notesByPartWord);
+
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(NoteListResponse.builder()
+                        .notes(notesByPartWord)
                         .build())
                 .build(), HttpStatus.OK);
     }

@@ -12,8 +12,8 @@ import com.marzhiievskyi.home_notes.domain.constants.Code;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
-import com.marzhiievskyi.home_notes.util.EncryptUtils;
-import com.marzhiievskyi.home_notes.util.ValidationUtils;
+import com.marzhiievskyi.home_notes.util.EncryptProcessor;
+import com.marzhiievskyi.home_notes.util.ValidationProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,15 +27,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final ValidationUtils validationUtils;
-    private final EncryptUtils encryptUtils;
+    private final ValidationProcessor validationProcessor;
+    private final EncryptProcessor encryptProcessor;
     private final UserDaoImpl userDao;
     private final SearchService searchService;
 
 
     public ResponseEntity<Response> registration(RegistrationRequestUserDto registerRequest) {
 
-        validationUtils.validationRequest(registerRequest);
+        validationProcessor.validationRequest(registerRequest);
 
         String nickname = registerRequest.getAuthorization().getNickname();
         if (userDao.isExistNickname(nickname)) {
@@ -46,8 +46,8 @@ public class UserService {
                     .build();
         }
 
-        String accessToken = encryptUtils.generateAccessToken();
-        String encryptedPassword = encryptUtils.encryptPassword(registerRequest.getAuthorization().getPassword());
+        String accessToken = encryptProcessor.generateAccessToken();
+        String encryptedPassword = encryptProcessor.encryptPassword(registerRequest.getAuthorization().getPassword());
 
         userDao.insertNewUser(UserDto.builder()
                 .nickname(nickname)
@@ -65,9 +65,9 @@ public class UserService {
 
     public ResponseEntity<Response> login(LoginRequestUserDto loginRequest) {
 
-        validationUtils.validationRequest(loginRequest);
+        validationProcessor.validationRequest(loginRequest);
 
-        String encryptedPassword = encryptUtils.encryptPassword(loginRequest.getAuthorization().getPassword());
+        String encryptedPassword = encryptProcessor.encryptPassword(loginRequest.getAuthorization().getPassword());
         String accessToken = userDao.getAccessTokenIfExist(UserDto.builder()
                 .nickname(loginRequest.getAuthorization().getNickname())
                 .encryptedPassword(encryptedPassword)
@@ -80,11 +80,10 @@ public class UserService {
 
     public ResponseEntity<Response> publicNote(PublicNoteRequestDto publicRequestNote, String accessToken) {
 
-        validationUtils.validationRequest(publicRequestNote);
+        validationProcessor.validationRequest(publicRequestNote);
 
-        Long userId = userDao.getUserIdByAccessToken(accessToken);
+        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
         Long noteId = userDao.addNoteByUserId(publicRequestNote.getText(), userId);
-        log.info("userId: {}, noteId: {}", userId, noteId);
 
         for (String tag : publicRequestNote.getTags()) {
             userDao.addTag(tag);
@@ -97,7 +96,7 @@ public class UserService {
 
     public ResponseEntity<Response> getUserNotes(String accessToken) {
 
-        Long userId = userDao.getUserIdByAccessToken(accessToken);
+        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
         List<NoteResponseDto> notesByUserId = userDao.getNotesByUserId(userId);
 
         for (NoteResponseDto note : notesByUserId) {

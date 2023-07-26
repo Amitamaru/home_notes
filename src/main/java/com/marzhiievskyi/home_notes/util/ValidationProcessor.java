@@ -14,7 +14,7 @@ import java.util.Set;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ValidationUtils {
+public class ValidationProcessor {
 
     private final Validator validator;
 
@@ -28,7 +28,7 @@ public class ValidationUtils {
 
                 String resultValidation = validated.stream()
                         .map(ConstraintViolation::getMessage)
-                        .reduce((s1, s2) -> s1 + ". " + s2).orElse("");
+                        .reduce((firstPart, secondPart) -> firstPart + ". " + secondPart).orElse("");
 
                 log.error("The json passed in the request is not valid, validation errors: {}", resultValidation);
 

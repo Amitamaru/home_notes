@@ -69,7 +69,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
-    public Long getUserIdByAccessToken(String token) {
+    public Long findUserIdIByTokenOrThrowException(String token) {
         try {
             return jdbcTemplate.queryForObject("SELECT id from user where access_token = ?", Long.class, token);
 
@@ -105,10 +105,5 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
                                         "FROM note JOIN user u on note.user_id = u.id " +
                                         "WHERE user_id = ? " +
                                         "ORDER BY time_insert DESC ", new NoteResponseRowMapper(), userId);
-    }
-
-    @Override
-    public List<String> getTagsByNoteId(Long noteId) {
-        return jdbcTemplate.queryForList("SELECT text FROM tag WHERE id IN (SELECT tag_id FROM note_tag WHERE note_id = ?)", String.class, noteId);
     }
 }

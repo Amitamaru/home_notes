@@ -1,6 +1,6 @@
 package com.marzhiievskyi.home_notes.domain.api.user.common;
 
-import com.marzhiievskyi.home_notes.domain.constants.RegExp;
+import com.marzhiievskyi.home_notes.domain.constants.ValidationRegExp;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 public class Authorization {
 
     @NotBlank(message = "nickname must be filled")
-    @Pattern(regexp = RegExp.nickname, message = "incorrect nickname")
+    @Pattern(regexp = ValidationRegExp.nickname, message = "incorrect nickname")
     private String nickname;
 
     @NotBlank(message = "password must be filled")
-    @Pattern(regexp = RegExp.password, message = "incorrect password")
+    @Pattern(regexp = ValidationRegExp.password, message = "incorrect password")
     private String password;
 }
