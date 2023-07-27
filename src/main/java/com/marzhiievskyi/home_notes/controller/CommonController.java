@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommonController {
     @GetMapping("/version")
     public String version() {
-        String version = "Home notes. Version 1.0.0 (BETA)";
-        log.info(version);
-        return version;
+        return  "Home notes. Version 1.0.0 (BETA)";
     }
 }
