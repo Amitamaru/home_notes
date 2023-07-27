@@ -20,33 +20,22 @@ public class UserController {
 
     @PostMapping("/registration")
     public ResponseEntity<Response> registrationNewUser(@RequestBody final RegistrationRequestUserDto registerRequest) {
-        log.info("START endpoint registration, request: {}", registerRequest);
-        ResponseEntity<Response> response = userService.registration(registerRequest);
-        log.info("END endpoint registration, response: {}", response);
-        return response;
+        return userService.registration(registerRequest);
     }
 
     @PostMapping("/login")
     public ResponseEntity<Response> loginUser(@RequestBody final LoginRequestUserDto loginRequest) {
-        log.info("START endpoint login, request: {}", loginRequest);
-        ResponseEntity<Response> response = userService.login(loginRequest);
-        log.info("END endpoint login, response: {}", response);
-        return response;
+        return userService.login(loginRequest);
     }
     @PostMapping("/publicNote")
     public ResponseEntity<Response> publicNote(
             @RequestHeader final String accessToken,
             @RequestBody final PublicNoteRequestDto publicRequestNote) {
-        log.info("START endpoint publicNote, accessToken: {}, request {}", accessToken, publicRequestNote);
-        ResponseEntity<Response> response = userService.publicNote(publicRequestNote, accessToken);
-        log.info("END endpoint, response: {}", response);
-        return response;
+        return userService.publicNote(publicRequestNote, accessToken);
+
     }
     @GetMapping("/getMyNotes")
     public ResponseEntity<Response> getUserNotes(@RequestHeader String accessToken) {
-        log.info("START endpoint getUserNotes, accessToken: {}", accessToken);
-        ResponseEntity<Response> response = userService.getUserNotes(accessToken);
-        log.info("END endpoint getUserNotes, response: {}", response);
-        return response;
+        return userService.getUserNotes(accessToken);
     }
 }

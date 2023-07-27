@@ -2,8 +2,10 @@ package com.marzhiievskyi.home_notes.dao;
 
 import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.common.TagResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteByTagRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNotesByWordRequestDto;
+import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameRequestDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,4 +19,6 @@ public interface SearchDao {
     List<NoteResponseDto> getNotesByTag(SearchNoteByTagRequestDto searchNoteByTagRequestDto);
 
     List<NoteResponseDto> findNotesByPartWord(SearchNotesByWordRequestDto searchNotesByWordRequestDto);
+
+    List<UserResponseDto> getUsersByNicknamePart(SearchUserByNicknameRequestDto searchUserRequest);
 }

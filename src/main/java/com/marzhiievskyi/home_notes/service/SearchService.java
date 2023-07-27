@@ -5,10 +5,13 @@ import com.marzhiievskyi.home_notes.dao.UserDao;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteListResponse;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.common.TagResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteByTagRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNotesByWordRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.tag.SearchTagResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.search.tag.SearchTagsRequestDto;
+import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameRequestDto;
+import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameResponseDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.service.common.CommonService;
@@ -30,10 +33,6 @@ public class SearchService {
     private final UserDao userDao;
     private final ValidationProcessor validationProcessor;
     private final CommonService commonService;
-
-    public List<TagResponseDto> getTagsByNoteId(Long noteId) {
-        return searchDao.getTagsByNoteId(noteId);
-    }
 
     public ResponseEntity<Response> findTagsByPart(SearchTagsRequestDto searchTagRequest, String accessToken) {
 
@@ -75,6 +74,19 @@ public class SearchService {
         return new ResponseEntity<>(SuccessResponse.builder()
                 .data(NoteListResponse.builder()
                         .notes(notesByPartWord)
+                        .build())
+                .build(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Response> findUserByPartNickname(SearchUserByNicknameRequestDto searchUserRequest, String accessToken) {
+        validationProcessor.validationRequest(searchUserRequest);
+        userDao.findUserIdIByTokenOrThrowException(accessToken);
+
+        List<UserResponseDto> users = searchDao.getUsersByNicknamePart(searchUserRequest);
+
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(SearchUserByNicknameResponseDto.builder()
+                        .users(users)
                         .build())
                 .build(), HttpStatus.OK);
     }

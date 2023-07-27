@@ -12,6 +12,7 @@ import com.marzhiievskyi.home_notes.domain.constants.Code;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
+import com.marzhiievskyi.home_notes.service.common.CommonService;
 import com.marzhiievskyi.home_notes.util.EncryptProcessor;
 import com.marzhiievskyi.home_notes.util.ValidationProcessor;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class UserService {
     private final ValidationProcessor validationProcessor;
     private final EncryptProcessor encryptProcessor;
     private final UserDaoImpl userDao;
-    private final SearchService searchService;
+    private final CommonService commonService;
 
 
     public ResponseEntity<Response> registration(RegistrationRequestUserDto registerRequest) {
@@ -99,9 +100,7 @@ public class UserService {
         Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
         List<NoteResponseDto> notesByUserId = userDao.getNotesByUserId(userId);
 
-        for (NoteResponseDto note : notesByUserId) {
-            note.setTags(searchService.getTagsByNoteId(note.getNoteId()));
-        }
+        commonService.insertDataIntoNotes(notesByUserId);
 
         return new ResponseEntity<>(SuccessResponse.builder()
                 .data(NoteListResponse.builder()
@@ -109,4 +108,6 @@ public class UserService {
                         .build())
                 .build(), HttpStatus.OK);
     }
+
+
 }

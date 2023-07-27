@@ -7,6 +7,6 @@ public class ValidationRegExp {
     public final static String note = "^[a-zA-Z0-9а-яА-Я.,:; _?!+=/^'\\\\\"*(){}\\[\\]\\-]{1,140}$";
     public final static String tag = "^[a-zA-Z0-9а-яА-Я.,:; _?!+=/'\\\"*(){}\\[\\]\\-]{3,25}$";
     public final static String partWord = "^[a-zA-Z0-9а-яА-Я.,:; _?!+=/'\\\"*(){}\\[\\]\\-]{3,25}$";
-
+    public final static String partNickname = "^[a-zA-Z0-9а-яА-Я. _-]{3,15}$";
 
 }
