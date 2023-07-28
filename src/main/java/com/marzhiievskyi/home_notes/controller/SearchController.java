@@ -46,4 +46,6 @@ public class SearchController {
             @RequestBody final SearchUserByNicknameRequestDto searchUserByNicknameRequestDto) {
         return searchService.findUserByPartNickname(searchUserByNicknameRequestDto, accessToken);
     }
+
+    //TODO add method search notes by user ID
 }

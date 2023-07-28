@@ -42,7 +42,7 @@ public class UserService {
         if (userDao.isExistNickname(nickname)) {
             throw CommonException.builder()
                     .code(Code.NICKNAME_BUSY)
-                    .message("this nickname is busy please enter another")
+                    .userMessage("this nickname is busy please enter another")
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .build();
         }

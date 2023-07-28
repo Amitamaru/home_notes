@@ -21,7 +21,8 @@ public class HomeNotesErrorHandler {
         return new ResponseEntity<>(ErrorResponse.builder()
                 .error(Error.builder()
                         .code(e.getCode())
-                        .userMessage(e.getMessage())
+                        .userMessage(e.getUserMessage())
+                        .techMessage(e.getTechMessage())
                         .build())
                 .build(), e.getHttpStatus());
     }

@@ -34,7 +34,7 @@ public class ValidationProcessor {
 
                 throw CommonException.builder()
                         .code(Code.REQUEST_VALIDATION_ERROR)
-                        .message(resultValidation)
+                        .techMessage(resultValidation)
                         .httpStatus(HttpStatus.BAD_REQUEST)
                         .build();
             }

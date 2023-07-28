@@ -62,7 +62,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.error(exception.toString());
             throw CommonException.builder()
                     .code(Code.USER_NOT_FOUND)
-                    .message("user not found")
+                    .userMessage("user not found")
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .build();
         }
@@ -77,7 +77,7 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
             log.error(exception.toString());
             throw CommonException.builder()
                     .code(Code.AUTHORIZATION_ERROR)
-                    .message("error of authorization")
+                    .userMessage("error of authorization")
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .build();
         }

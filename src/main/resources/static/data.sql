@@ -43,3 +43,15 @@ CREATE TABLE home_notes.note_tag
     FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE `phrase_id_tag_id` (`note_id`, `tag_id`)
 ) COLLATE UTF8MB4_bin;
+
+CREATE TABLE home_notes.subscription
+(
+    id          BIGINT AUTO_INCREMENT,
+    sub_user_id BIGINT    NOT NULL,
+    pub_user_id BIGINT    NOT NULL,
+    time_insert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (sub_user_id) REFERENCES user (id),
+    FOREIGN KEY (pub_user_id) REFERENCES user (id),
+    UNIQUE KEY sub_user_id_pub_user_id (sub_user_id, pub_user_id)
+) COLLATE utf8_bin;

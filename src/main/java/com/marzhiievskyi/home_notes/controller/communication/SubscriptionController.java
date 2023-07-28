@@ -40,6 +40,6 @@ public class SubscriptionController {
     @GetMapping("/getMyPublisher")
     public ResponseEntity<Response> getMyPublisher(
             @RequestHeader final String accessToken) {
-        return subscriptionService.getMyPublisher(accessToken);
+        return subscriptionService.getMyPublishers(accessToken);
     }
 }
