@@ -50,4 +50,9 @@ public class SubscriptionDaoImpl extends JdbcDaoSupport implements SubscriptionD
                     .build();
         }
     }
+
+    @Override
+    public void unsubscription(Long subscriberUserId, Long publisherUserId) {
+        jdbcTemplate.update("DELETE FROM subscription WHERE sub_user_id = ? AND pub_user_id = ?", subscriberUserId, publisherUserId);
+    }
 }

@@ -5,4 +5,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface SubscriptionDao {
     void subscription(Long subscriberUserId, Long publisherUserId);
+
+    void unsubscription(Long subscriberUserId, Long publisherUserId);
 }

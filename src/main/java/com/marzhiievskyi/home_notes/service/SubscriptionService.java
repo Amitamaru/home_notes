@@ -2,7 +2,6 @@ package com.marzhiievskyi.home_notes.service;
 
 import com.marzhiievskyi.home_notes.dao.SubscriptionDao;
 import com.marzhiievskyi.home_notes.dao.UserDao;
-import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.communication.subscription.SubscriptionRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.communication.subscription.UnsubscriptionRequestDto;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
@@ -16,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -50,7 +48,13 @@ public class SubscriptionService {
 
     public ResponseEntity<Response> unsubscription(UnsubscriptionRequestDto unsubscriptionRequestDto, String accessToken) {
 
-        return null;
+        validationProcessor.validationRequest(unsubscriptionRequestDto);
+
+        Long subscriberUserId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long publisherUserId = unsubscriptionRequestDto.getPubUserId();
+
+        subscriptionDao.unsubscription(subscriberUserId, publisherUserId);
+        return new ResponseEntity<>(SuccessResponse.builder().build(), HttpStatus.OK);
     }
 
     public ResponseEntity<Response> getMySubscribers(String accessToken) {
