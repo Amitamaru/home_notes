@@ -1,8 +1,9 @@
 # Search functional requirements
 
-- Search for tags
-- Search for notes by tags
-- Search for notes by word<br/><br/>
+- Search for tags or part of tag
+- Search for notes by tags 
+- Search for notes by word or part of word
+- Search for users by nickname or part of nickname<br/><br/>
 
 ## searchTags method (auth)
 **incoming data**<br/>
@@ -162,6 +163,44 @@ status 200
           }
         ],
         "timeInsert": "2023-07-13 19:17:33"
+      }
+    ]
+  }
+}
+```
+## searchUsersByPartNickname method (auth)
+**incoming data**<br/>
+`AccessToken: d4a76068f5104f26975499d22bcd11cc1665995491673`<br/>
+```json
+{
+  "partNickname": "desm"
+}
+```
+**validation**<br/>
+partNickname >= 3 symbols, <= 15 symbols, allowed characters a-zA-Z0-9а-яА-Я. _-<br/>
+
+**logic**<br/>
+service search nicknames by partNickname and return to user array of nickname and id<br/>
+sorting - at first mus be nicknames which begins from partNickname<br/>
+
+
+**out coming data if access**<br/>
+status 200
+```json
+{
+  "data": {
+    "users": [
+      {
+        "userId": 2,
+        "nickname": "desmont"
+      },
+      {
+        "userId": 7,
+        "nickname": "desmologin"
+      },
+      {
+        "userId": 9,
+        "nickname": "amidesman"
       }
     ]
   }
