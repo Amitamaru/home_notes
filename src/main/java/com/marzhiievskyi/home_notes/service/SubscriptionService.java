@@ -2,6 +2,8 @@ package com.marzhiievskyi.home_notes.service;
 
 import com.marzhiievskyi.home_notes.dao.SubscriptionDao;
 import com.marzhiievskyi.home_notes.dao.UserDao;
+import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.communication.subscribers.MySubscribersResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.communication.subscription.SubscriptionRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.communication.subscription.UnsubscriptionRequestDto;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -59,17 +62,25 @@ public class SubscriptionService {
 
     public ResponseEntity<Response> getMySubscribers(String accessToken) {
 
-        userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        List<UserResponseDto> userSubscribers = subscriptionDao.getUserSubscribers(userId);
 
-        return null;
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(MySubscribersResponseDto.builder()
+                        .subscribers(userSubscribers)
+                        .build())
+                .build(), HttpStatus.OK);
     }
 
     public ResponseEntity<Response> getMyPublishers(String accessToken) {
 
-        userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        List<UserResponseDto> userPublishers = subscriptionDao.getUserPublishers(userId);
 
-
-
-        return null;
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(MySubscribersResponseDto.builder()
+                        .subscribers(userPublishers)
+                        .build())
+                .build(), HttpStatus.OK);
     }
 }

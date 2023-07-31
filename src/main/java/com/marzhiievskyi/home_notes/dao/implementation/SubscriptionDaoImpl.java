@@ -1,6 +1,8 @@
 package com.marzhiievskyi.home_notes.dao.implementation;
 
 import com.marzhiievskyi.home_notes.dao.SubscriptionDao;
+import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.common.UserResponseRowMapper;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
 import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
 import jakarta.annotation.PostConstruct;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -54,5 +57,15 @@ public class SubscriptionDaoImpl extends JdbcDaoSupport implements SubscriptionD
     @Override
     public void unsubscription(Long subscriberUserId, Long publisherUserId) {
         jdbcTemplate.update("DELETE FROM subscription WHERE sub_user_id = ? AND pub_user_id = ?", subscriberUserId, publisherUserId);
+    }
+
+    @Override
+    public List<UserResponseDto> getUserSubscribers(Long userId) {
+        return jdbcTemplate.query("SELECT id, nickname FROM user WHERE id in (SELECT sub_user_id FROM subscription WHERE pub_user_id = ?)", new UserResponseRowMapper(), userId);
+    }
+
+    @Override
+    public List<UserResponseDto> getUserPublishers(Long userId) {
+        return jdbcTemplate.query("SELECT id, nickname FROM user WHERE id in (SELECT pub_user_id FROM subscription WHERE sub_user_id = ?)", new UserResponseRowMapper(), userId);
     }
 }
