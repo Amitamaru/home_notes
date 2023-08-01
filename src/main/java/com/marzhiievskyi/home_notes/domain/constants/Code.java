@@ -8,8 +8,6 @@ public enum Code {
     AUTHORIZATION_ERROR,
     MISSING_REQUEST_HEADER,
     NOT_READABLE,
-
-    //prepare
     SUBSCRIPTION_LOGIC_ERROR,
     PUBLISHER_NOT_FOUND,
     COMMENT_NOT_FOUND,
@@ -18,5 +16,6 @@ public enum Code {
     NOT_SUPPORTED,
     NOT_YOUR_COMMENT,
     NOT_BLOCK_YOURSELF,
-    BLOCKED
+    BLOCKED,
+    NO_DATA
 }

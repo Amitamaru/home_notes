@@ -1,6 +1,7 @@
 package com.marzhiievskyi.home_notes.controller;
 
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteByTagRequestDto;
+import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteByUserRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNotesByWordRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.tag.SearchTagsRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameRequestDto;
@@ -48,4 +49,11 @@ public class SearchController {
     }
 
     //TODO add method search notes by user ID
+
+    @PostMapping("/searchNotesByUser")
+    public ResponseEntity<Response> searchNotesByUser(
+            @RequestHeader final String accessToken,
+            @RequestBody final SearchNoteByUserRequestDto searchNoteByUserRequestDto) {
+        return searchService.findNotesByUser(searchNoteByUserRequestDto, accessToken);
+    }
 }

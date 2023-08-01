@@ -84,6 +84,21 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
     }
 
     @Override
+    public Long findUserIdIOrThrowException(Long userId) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT id from user WHERE id = ?", Long.class, userId);
+
+        } catch (EmptyResultDataAccessException exception) {
+            log.error(exception.toString());
+            throw CommonException.builder()
+                    .code(Code.USER_NOT_FOUND)
+                    .userMessage("user not found")
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+    }
+
+    @Override
     public Long addNoteByUserId(String noteText, Long userId) {
         jdbcTemplate.update("INSERT INTO note (user_id, text) VALUES (?, ?);", userId, noteText);
         return jdbcTemplate.queryForObject("SELECT id FROM note WHERE id = LAST_INSERT_ID();", Long.class);
