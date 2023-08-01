@@ -40,4 +40,16 @@ public class ValidationProcessor {
             }
         }
     }
+
+    public void validationDecimalMin(String fieldName, long fieldValue, long constraint) {
+        if (fieldValue < constraint) {
+            log.error("Request validation of '{}' error:  field value {} < constraint {}", fieldName, fieldValue, constraint);
+            throw CommonException.builder()
+                    .code(Code.REQUEST_VALIDATION_ERROR)
+                    .techMessage(fieldName + " must be equal or more than " + constraint)
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+    }
 }

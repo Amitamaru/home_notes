@@ -1,6 +1,8 @@
 package com.marzhiievskyi.home_notes.dao.implementation;
 
 import com.marzhiievskyi.home_notes.dao.SubscriptionDao;
+import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseRowMapper;
 import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.common.UserResponseRowMapper;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
@@ -67,5 +69,18 @@ public class SubscriptionDaoImpl extends JdbcDaoSupport implements SubscriptionD
     @Override
     public List<UserResponseDto> getUserPublishers(Long userId) {
         return jdbcTemplate.query("SELECT id, nickname FROM user WHERE id in (SELECT pub_user_id FROM subscription WHERE sub_user_id = ?)", new UserResponseRowMapper(), userId);
+    }
+
+    @Override
+    public List<NoteResponseDto> findMyPublishersNotes(Long userId, int from, int limit) {
+        return jdbcTemplate.query("SELECT  note.id AS note_id, note.text, note.time_insert, note.user_id, u.nickname AS nickname " +
+                "FROM note " +
+                "    JOIN user u ON u.id = note.user_id " +
+                "WHERE user_id IN (" +
+                "    SELECT pub_user_id " +
+                "    FROM subscription " +
+                "    WHERE sub_user_id = ?) " +
+                "ORDER BY note.time_insert DESC " +
+                "LIMIT ?,?", new NoteResponseRowMapper(), userId, from, limit);
     }
 }

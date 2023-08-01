@@ -48,8 +48,6 @@ public class SearchController {
         return searchService.findUserByPartNickname(searchUserByNicknameRequestDto, accessToken);
     }
 
-    //TODO add method search notes by user ID
-
     @PostMapping("/searchNotesByUser")
     public ResponseEntity<Response> searchNotesByUser(
             @RequestHeader final String accessToken,

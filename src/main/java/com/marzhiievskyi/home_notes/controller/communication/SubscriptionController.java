@@ -42,4 +42,12 @@ public class SubscriptionController {
             @RequestHeader final String accessToken) {
         return subscriptionService.getMyPublishers(accessToken);
     }
+
+    @GetMapping("getMyPublishersNotes/{from}/{limit}")
+    public ResponseEntity<Response> getMyPublishersNotes(
+            @RequestHeader final String accessToken,
+            @PathVariable int from,
+            @PathVariable int limit) {
+        return subscriptionService.findMyPublishersNotes(accessToken, from, limit);
+    }
 }
