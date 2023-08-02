@@ -103,14 +103,6 @@ public class SearchService {
 
         List<NoteResponseDto> notesByUserId = userDao.getNotesByUserId(userId);
 
-        if (notesByUserId.isEmpty()) {
-            throw CommonException.builder()
-                    .code(Code.NO_DATA)
-                    .userMessage("no found user notes")
-                    .httpStatus(HttpStatus.OK)
-                    .build();
-        }
-
         commonService.insertDataIntoNotes(notesByUserId);
 
         return new ResponseEntity<>(SuccessResponse.builder()
