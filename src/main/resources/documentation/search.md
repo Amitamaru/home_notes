@@ -206,3 +206,71 @@ status 200
   }
 }
 ```
+## searchNotesByUserId method (auth)
+**incoming data**<br/>
+`AccessToken: d4a76068f5104f26975499d22bcd11cc1665995491673`<br/>
+```json
+{
+  "userId": "1"
+}
+```
+**validation**<br/>
+userId >= 1 
+
+**logic**<br/>
+service search user notes by userId and return list of notes<br/>
+If the user is not found, then return USER_NOT_FOUND<br/>
+
+**out coming data if access**<br/>
+status 200
+```json
+{
+  "data": {
+    "notes": [
+      {
+        "noteId": 22,
+        "userid": 1,
+        "nickname": "mamaKevina",
+        "text": "I'm still learn",
+        "tags": [
+          {
+            "tagId": 13,
+            "text": "Java"
+          }
+        ],
+        "timeInsert": "2023-07-06 20:06:44"
+      },
+      {
+        "noteId": 18,
+        "userid": 1,
+        "nickname": "mamaKevina",
+        "text": "I'm codding my pet project",
+        "tags": [
+          {
+            "tagId": 13,
+            "text": "Java"
+          },
+          {
+            "tagId": 19,
+            "text": "Javadoc"
+          },
+          {
+            "tagId": 29,
+            "text": "spring"
+          }
+        ],
+        "timeInsert": "2023-07-13 19:17:33"
+      }
+    ]
+  }
+}
+```
+**out coming data if not access**<br/>
+status 400
+```json
+{
+  "error": {
+    "code": "USER_NOT_FOUND",
+    "userMessage": "user not found"
+  }
+}
