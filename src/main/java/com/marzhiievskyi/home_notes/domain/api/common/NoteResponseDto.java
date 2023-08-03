@@ -17,6 +17,7 @@ public class NoteResponseDto {
     private Long userid;
     private String nickname;
     private String text;
+    private Long likesCount;
     private List<TagResponseDto> tags;
     private String timeInsert;
 }

@@ -32,16 +32,6 @@ public class SearchDaoImpl extends JdbcDaoSupport implements SearchDao {
     }
 
     @Override
-    public List<TagResponseDto> getTagsByNoteId(Long noteId) {
-        try {
-            return jdbcTemplate.query("SELECT id, text FROM tag WHERE id IN (SELECT tag_id FROM note_tag WHERE  note_id = ?)", new TagResponseRowMapper(), noteId);
-        } catch (Exception exception) {
-            log.error(exception.getMessage());
-            return null;
-        }
-    }
-
-    @Override
     public List<TagResponseDto> getTagsByTagPart(String partTag) {
         return jdbcTemplate.query("SELECT id, text " +
                         "FROM ( SELECT tag.id, text, count(tag.id) " +

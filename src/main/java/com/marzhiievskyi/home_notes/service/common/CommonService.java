@@ -1,6 +1,6 @@
 package com.marzhiievskyi.home_notes.service.common;
 
-import com.marzhiievskyi.home_notes.dao.SearchDao;
+import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommonService {
 
-    private final SearchDao searchDao;
+    private final CommonDao commonDao;
 
     public void insertDataIntoNotes(List<NoteResponseDto> notes) {
         for (NoteResponseDto note : notes) {
-            note.setTags(searchDao.getTagsByNoteId(note.getNoteId()));
+            note.setTags(commonDao.getTagsByNoteId(note.getNoteId()));
+            note.setLikesCount(commonDao.getLikesCountByNoteId(note.getNoteId()));
         }
     }
 }
