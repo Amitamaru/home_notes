@@ -34,6 +34,7 @@ public class SubscriptionDaoImpl extends JdbcDaoSupport implements SubscriptionD
     private void init() {
         setDataSource(dataSource);
     }
+
     @Override
     public void subscription(Long subscriberUserId, Long publisherUserId) {
 

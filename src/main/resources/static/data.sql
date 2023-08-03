@@ -55,3 +55,15 @@ CREATE TABLE home_notes.subscription
     FOREIGN KEY (pub_user_id) REFERENCES user (id),
     UNIQUE KEY sub_user_id_pub_user_id (sub_user_id, pub_user_id)
 ) COLLATE utf8_bin;
+
+CREATE TABLE home_notes.like_note
+(
+    id          BIGINT AUTO_INCREMENT,
+    note_id     BIGINT    NOT NULL,
+    user_id     BIGINT    NOT NULL,
+    time_insert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (note_id) REFERENCES note (id),
+    FOREIGN KEY (user_id) REFERENCES user (id),
+    UNIQUE `phrase_id_user_id` (`note_id`, `user_id`)
+) COLLATE utf8_bin;
