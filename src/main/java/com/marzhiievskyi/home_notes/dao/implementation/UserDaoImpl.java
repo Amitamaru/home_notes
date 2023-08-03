@@ -68,20 +68,6 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
         }
     }
 
-    @Override
-    public Long findUserIdIByTokenOrThrowException(String token) {
-        try {
-            return jdbcTemplate.queryForObject("SELECT id from user where access_token = ?", Long.class, token);
-
-        } catch (EmptyResultDataAccessException exception) {
-            log.error(exception.toString());
-            throw CommonException.builder()
-                    .code(Code.AUTHORIZATION_ERROR)
-                    .userMessage("error of authorization")
-                    .httpStatus(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
-    }
 
     @Override
     public Long findUserIdIOrThrowException(Long userId) {

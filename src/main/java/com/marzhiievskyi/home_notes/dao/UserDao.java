@@ -15,7 +15,6 @@ public interface UserDao {
 
     String getAccessTokenIfExist(UserDto userDto);
 
-    Long findUserIdIByTokenOrThrowException(String token);
     Long findUserIdIOrThrowException(Long userId);
 
     Long addNoteByUserId(String noteText, Long userId);

@@ -1,7 +1,7 @@
 package com.marzhiievskyi.home_notes.service;
 
+import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.ReactionDao;
-import com.marzhiievskyi.home_notes.dao.UserDao;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.util.ValidationProcessor;
@@ -17,13 +17,13 @@ import org.springframework.stereotype.Service;
 public class ReactionService {
 
     private final ReactionDao reactionDao;
-    private final UserDao userDao;
+    private final CommonDao commonDao;
     private final ValidationProcessor validationProcessor;
 
     public ResponseEntity<Response> likeNote(String accessToken, long noteId) {
 
         validationProcessor.validationDecimalMin("noteId", noteId, 1);
-        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
         reactionDao.likeNote(userId, noteId);
         return new ResponseEntity<>(SuccessResponse.builder()
@@ -33,7 +33,7 @@ public class ReactionService {
     public ResponseEntity<Response> disLikeNote(String accessToken, long noteId) {
 
         validationProcessor.validationDecimalMin("noteId", noteId, 1);
-        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
         reactionDao.disLikeNote(userId, noteId);
         return new ResponseEntity<>(SuccessResponse.builder()

@@ -1,7 +1,7 @@
 package com.marzhiievskyi.home_notes.service;
 
+import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.SubscriptionDao;
-import com.marzhiievskyi.home_notes.dao.UserDao;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteListResponse;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
@@ -29,9 +29,9 @@ import java.util.Objects;
 public class SubscriptionService {
 
     private final ValidationProcessor validationProcessor;
-    private final UserDao userDao;
     private final SubscriptionDao subscriptionDao;
     private final CommonService commonService;
+    private final CommonDao commonDao;
 
 
 
@@ -39,7 +39,7 @@ public class SubscriptionService {
 
         validationProcessor.validationRequest(subscriptionRequestDto);
 
-        Long subscriberUserId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long subscriberUserId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
         Long publisherUserId = subscriptionRequestDto.getPubUserId();
 
         if (Objects.equals(subscriberUserId, publisherUserId)) {
@@ -58,7 +58,7 @@ public class SubscriptionService {
 
         validationProcessor.validationRequest(unsubscriptionRequestDto);
 
-        Long subscriberUserId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long subscriberUserId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
         Long publisherUserId = unsubscriptionRequestDto.getPubUserId();
 
         subscriptionDao.unsubscription(subscriberUserId, publisherUserId);
@@ -67,7 +67,7 @@ public class SubscriptionService {
 
     public ResponseEntity<Response> getMySubscribers(String accessToken) {
 
-        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
         List<UserResponseDto> userSubscribers = subscriptionDao.getUserSubscribers(userId);
 
         return new ResponseEntity<>(SuccessResponse.builder()
@@ -79,7 +79,7 @@ public class SubscriptionService {
 
     public ResponseEntity<Response> getMyPublishers(String accessToken) {
 
-        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
         List<UserResponseDto> userPublishers = subscriptionDao.getUserPublishers(userId);
 
         return new ResponseEntity<>(SuccessResponse.builder()
@@ -94,7 +94,7 @@ public class SubscriptionService {
         validationProcessor.validationDecimalMin("from", from, 0);
         validationProcessor.validationDecimalMin("limit", limit, 1);
 
-        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
         List<NoteResponseDto> myPublishersNotes = subscriptionDao.findMyPublishersNotes(userId, from, limit);
         commonService.insertDataIntoNotes(myPublishersNotes);

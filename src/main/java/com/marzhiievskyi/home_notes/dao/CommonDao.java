@@ -10,4 +10,6 @@ public interface CommonDao {
     List<TagResponseDto> getTagsByNoteId(Long noteId);
 
     Long getLikesCountByNoteId(Long noteId);
+
+    Long findUserIdIByTokenOrThrowException(String token);
 }

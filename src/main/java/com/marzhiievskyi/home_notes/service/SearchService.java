@@ -1,5 +1,6 @@
 package com.marzhiievskyi.home_notes.service;
 
+import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.SearchDao;
 import com.marzhiievskyi.home_notes.dao.UserDao;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteListResponse;
@@ -13,10 +14,8 @@ import com.marzhiievskyi.home_notes.domain.api.search.tag.SearchTagResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.search.tag.SearchTagsRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameResponseDto;
-import com.marzhiievskyi.home_notes.domain.constants.Code;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
-import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
 import com.marzhiievskyi.home_notes.service.common.CommonService;
 import com.marzhiievskyi.home_notes.util.ValidationProcessor;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +33,14 @@ public class SearchService {
 
     private final SearchDao searchDao;
     private final UserDao userDao;
+    private final CommonDao commonDao;
     private final ValidationProcessor validationProcessor;
     private final CommonService commonService;
 
     public ResponseEntity<Response> findTagsByPart(SearchTagsRequestDto searchTagRequest, String accessToken) {
 
         validationProcessor.validationRequest(searchTagRequest);
-        userDao.findUserIdIByTokenOrThrowException(accessToken);
+        commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
         List<TagResponseDto> tagsByTagPart = searchDao.getTagsByTagPart(searchTagRequest.getPartOfTag());
 
@@ -54,7 +54,7 @@ public class SearchService {
     public ResponseEntity<Response> findNotesByTag(SearchNoteByTagRequestDto searchNotesRequest, String accessToken) {
 
         validationProcessor.validationRequest(searchNotesRequest);
-        userDao.findUserIdIByTokenOrThrowException(accessToken);
+        commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
         List<NoteResponseDto> notesByTag = searchDao.getNotesByTag(searchNotesRequest);
         commonService.insertDataIntoNotes(notesByTag);
@@ -69,7 +69,7 @@ public class SearchService {
     public ResponseEntity<Response> findNotesByPartWord(SearchNotesByWordRequestDto searchNotesRequest, String accessToken) {
 
         validationProcessor.validationRequest(searchNotesRequest);
-        userDao.findUserIdIByTokenOrThrowException(accessToken);
+        commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
         List<NoteResponseDto> notesByPartWord = searchDao.findNotesByPartWord(searchNotesRequest);
         commonService.insertDataIntoNotes(notesByPartWord);
@@ -84,7 +84,7 @@ public class SearchService {
     public ResponseEntity<Response> findUserByPartNickname(SearchUserByNicknameRequestDto searchUserRequest, String accessToken) {
 
         validationProcessor.validationRequest(searchUserRequest);
-        userDao.findUserIdIByTokenOrThrowException(accessToken);
+        commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
         List<UserResponseDto> users = searchDao.getUsersByNicknamePart(searchUserRequest);
 
@@ -98,9 +98,9 @@ public class SearchService {
     public ResponseEntity<Response> findNotesByUser(SearchNoteByUserRequestDto searchNoteByUserRequestDto, String accessToken) {
 
         validationProcessor.validationRequest(searchNoteByUserRequestDto);
-        userDao.findUserIdIByTokenOrThrowException(accessToken);
-        Long userId = userDao.findUserIdIOrThrowException(searchNoteByUserRequestDto.getUserId());
+        commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
+        Long userId = userDao.findUserIdIOrThrowException(searchNoteByUserRequestDto.getUserId());
         List<NoteResponseDto> notesByUserId = userDao.getNotesByUserId(userId);
 
         commonService.insertDataIntoNotes(notesByUserId);

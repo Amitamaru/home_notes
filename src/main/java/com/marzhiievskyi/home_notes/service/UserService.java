@@ -1,5 +1,6 @@
 package com.marzhiievskyi.home_notes.service;
 
+import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.implementation.UserDaoImpl;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteListResponse;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
@@ -32,6 +33,7 @@ public class UserService {
     private final EncryptProcessor encryptProcessor;
     private final UserDaoImpl userDao;
     private final CommonService commonService;
+    private final CommonDao commonDao;
 
 
     public ResponseEntity<Response> registration(RegistrationRequestUserDto registerRequest) {
@@ -83,7 +85,7 @@ public class UserService {
 
         validationProcessor.validationRequest(publicRequestNote);
 
-        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
         Long noteId = userDao.addNoteByUserId(publicRequestNote.getText(), userId);
 
         for (String tag : publicRequestNote.getTags()) {
@@ -97,7 +99,7 @@ public class UserService {
 
     public ResponseEntity<Response> getUserNotes(String accessToken) {
 
-        Long userId = userDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
         List<NoteResponseDto> notesByUserId = userDao.getNotesByUserId(userId);
 
         commonService.insertDataIntoNotes(notesByUserId);
