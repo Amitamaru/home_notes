@@ -1,5 +1,6 @@
 package com.marzhiievskyi.home_notes.dao;
 
+import com.marzhiievskyi.home_notes.domain.api.communication.comment.WhoseCommentDto;
 import com.marzhiievskyi.home_notes.domain.api.communication.comment.CommentNoteRequestDto;
 import org.springframework.stereotype.Service;
 
@@ -9,4 +10,8 @@ public interface ReactionDao {
     void disLikeNote(Long userId, long noteId);
 
     void commentNote(Long userId, CommentNoteRequestDto commentNoteRequest);
+
+    WhoseCommentDto checkWhoseComment(Long commentId);
+
+    void deleteComment(Long commentId);
 }

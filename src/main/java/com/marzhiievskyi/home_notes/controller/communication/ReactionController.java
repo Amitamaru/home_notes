@@ -36,11 +36,11 @@ public class ReactionController {
             @RequestBody final CommentNoteRequestDto commentNoteRequest) {
         return reactionService.commentNote(accessToken, commentNoteRequest);
     }
-    @DeleteMapping("/deleteComment/{noteId}")
+    @DeleteMapping("/deleteComment/{commentId}")
     public ResponseEntity<Response> deleteComment(
             @RequestHeader final String accessToken,
-            @PathVariable String noteId) {
-        return reactionService.deleteComment(accessToken, noteId);
+            @PathVariable Long commentId) {
+        return reactionService.deleteComment(accessToken, commentId);
     }
 
 
