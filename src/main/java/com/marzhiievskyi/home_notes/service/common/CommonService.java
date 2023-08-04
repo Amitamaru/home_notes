@@ -19,6 +19,7 @@ public class CommonService {
         for (NoteResponseDto note : notes) {
             note.setTags(commonDao.getTagsByNoteId(note.getNoteId()));
             note.setLikesCount(commonDao.getLikesCountByNoteId(note.getNoteId()));
+            note.setComments(commonDao.getCommentsByNoteId(note.getNoteId()));
         }
     }
 }

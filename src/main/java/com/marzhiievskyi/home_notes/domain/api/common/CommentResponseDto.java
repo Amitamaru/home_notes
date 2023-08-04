@@ -5,20 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NoteResponseDto {
+public class CommentResponseDto {
 
-    private Long noteId;
-    private Long userid;
+    private Long userId;
     private String nickname;
+    private Long commentId;
     private String text;
-    private Long likesCount;
-    private List<TagResponseDto> tags;
     private String timeInsert;
-    private List<CommentResponseDto> comments;
 }

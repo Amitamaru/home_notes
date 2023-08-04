@@ -67,3 +67,15 @@ CREATE TABLE home_notes.like_note
     FOREIGN KEY (user_id) REFERENCES user (id),
     UNIQUE `phrase_id_user_id` (`note_id`, `user_id`)
 ) COLLATE utf8_bin;
+
+CREATE TABLE home_notes.comment
+(
+    id          BIGINT AUTO_INCREMENT,
+    user_id     BIGINT       NOT NULL,
+    note_id   BIGINT       NOT NULL,
+    text        VARCHAR(140) NOT NULL,
+    time_insert TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (note_id) REFERENCES note (id),
+    FOREIGN KEY (user_id) REFERENCES user (id)
+) COLLATE utf8_bin;

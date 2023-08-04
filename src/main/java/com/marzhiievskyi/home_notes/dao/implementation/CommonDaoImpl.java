@@ -1,6 +1,8 @@
 package com.marzhiievskyi.home_notes.dao.implementation;
 
 import com.marzhiievskyi.home_notes.dao.CommonDao;
+import com.marzhiievskyi.home_notes.domain.api.common.CommentResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.common.CommentResponseRowMapper;
 import com.marzhiievskyi.home_notes.domain.api.common.TagResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.common.TagResponseRowMapper;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
@@ -44,6 +46,20 @@ public class CommonDaoImpl extends JdbcDaoSupport implements CommonDao {
                     .userMessage("error of authorization")
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .build();
+        }
+    }
+
+    @Override
+    public List<CommentResponseDto> getCommentsByNoteId(Long noteId) {
+        try {
+            return jdbcTemplate.query("SELECT comment.id AS comment_id, user_id, nickname, text, comment.time_insert " +
+                    "FROM comment " +
+                    "           JOIN user u  ON u.id = comment.user_id " +
+                    "WHERE note_id = ? " +
+                    "ORDER BY  comment.time_insert DESC;", new CommentResponseRowMapper(), noteId);
+        } catch (Exception exception) {
+            log.error(exception.getMessage());
+            return null;
         }
     }
 

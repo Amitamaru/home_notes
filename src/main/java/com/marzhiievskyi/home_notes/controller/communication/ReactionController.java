@@ -1,5 +1,6 @@
 package com.marzhiievskyi.home_notes.controller.communication;
 
+import com.marzhiievskyi.home_notes.domain.api.communication.comment.CommentNoteRequestDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.service.ReactionService;
 import lombok.RequiredArgsConstructor;
@@ -15,18 +16,32 @@ public class ReactionController {
 
     private final ReactionService reactionService;
 
-    @GetMapping("/likeNote/{noteId}")
+    @PostMapping("/likeNote/{noteId}")
     public ResponseEntity<Response> likeNote(
             @RequestHeader final String accessToken,
             @PathVariable long noteId) {
         return reactionService.likeNote(accessToken, noteId);
     }
 
-    @GetMapping("/disLikeNote/{noteId}")
+    @DeleteMapping("/disLikeNote/{noteId}")
     public ResponseEntity<Response> disLikeNote(
             @RequestHeader final String accessToken,
             @PathVariable long noteId) {
         return reactionService.disLikeNote(accessToken, noteId);
     }
+
+    @PostMapping("/commentNote")
+    public ResponseEntity<Response> commentNote(
+            @RequestHeader final String accessToken,
+            @RequestBody final CommentNoteRequestDto commentNoteRequest) {
+        return reactionService.commentNote(accessToken, commentNoteRequest);
+    }
+    @DeleteMapping("/deleteComment/{noteId}")
+    public ResponseEntity<Response> deleteComment(
+            @RequestHeader final String accessToken,
+            @PathVariable String noteId) {
+        return reactionService.deleteComment(accessToken, noteId);
+    }
+
 
 }

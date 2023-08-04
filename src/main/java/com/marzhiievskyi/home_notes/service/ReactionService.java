@@ -2,6 +2,7 @@ package com.marzhiievskyi.home_notes.service;
 
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.ReactionDao;
+import com.marzhiievskyi.home_notes.domain.api.communication.comment.CommentNoteRequestDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.util.ValidationProcessor;
@@ -38,5 +39,19 @@ public class ReactionService {
         reactionDao.disLikeNote(userId, noteId);
         return new ResponseEntity<>(SuccessResponse.builder()
                 .build(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Response> commentNote(String accessToken, CommentNoteRequestDto commentNoteRequest) {
+
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
+        validationProcessor.validationRequest(commentNoteRequest);
+
+        reactionDao.commentNote(userId, commentNoteRequest);
+        return new ResponseEntity<>(SuccessResponse.builder().build(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Response> deleteComment(String accessToken, String noteId) {
+
+        return null;
     }
 }
