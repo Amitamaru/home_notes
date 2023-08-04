@@ -30,7 +30,6 @@ public class HomeNotesErrorHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedErrorException(Exception e) {
         log.error("internal server error: {}", e.toString());
-        e.printStackTrace();
         return new ResponseEntity<>(ErrorResponse.builder()
                 .error(Error.builder()
                         .code(Code.INTERNAL_SERVER_ERROR)

@@ -54,9 +54,9 @@ public class SearchService {
     public ResponseEntity<Response> findNotesByTag(SearchNoteByTagRequestDto searchNotesRequest, String accessToken) {
 
         validationProcessor.validationRequest(searchNotesRequest);
-        commonDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
-        List<NoteResponseDto> notesByTag = searchDao.getNotesByTag(searchNotesRequest);
+        List<NoteResponseDto> notesByTag = searchDao.getNotesByTag(searchNotesRequest, userId);
         commonService.insertDataIntoNotes(notesByTag);
 
         return new ResponseEntity<>(SuccessResponse.builder()
@@ -69,9 +69,9 @@ public class SearchService {
     public ResponseEntity<Response> findNotesByPartWord(SearchNotesByWordRequestDto searchNotesRequest, String accessToken) {
 
         validationProcessor.validationRequest(searchNotesRequest);
-        commonDao.findUserIdIByTokenOrThrowException(accessToken);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
-        List<NoteResponseDto> notesByPartWord = searchDao.findNotesByPartWord(searchNotesRequest);
+        List<NoteResponseDto> notesByPartWord = searchDao.findNotesByPartWord(searchNotesRequest, userId);
         commonService.insertDataIntoNotes(notesByPartWord);
 
         return new ResponseEntity<>(SuccessResponse.builder()

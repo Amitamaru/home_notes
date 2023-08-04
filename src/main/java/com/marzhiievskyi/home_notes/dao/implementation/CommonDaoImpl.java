@@ -64,6 +64,16 @@ public class CommonDaoImpl extends JdbcDaoSupport implements CommonDao {
     }
 
     @Override
+    public boolean isBlocked(Long userId, Long checkBlockPublisher) {
+        return jdbcTemplate.queryForObject("SELECT EXISTS(SELECT * FROM block WHERE user_id = ? AND block_user_id = ?)", Long.class, checkBlockPublisher, userId) != 0;
+    }
+
+    @Override
+    public Long getUserIdByNoteId(long noteId) {
+        return jdbcTemplate.queryForObject("SELECT user_id FROM note WHERE id = ?", Long.class, noteId);
+    }
+
+    @Override
     public List<TagResponseDto> getTagsByNoteId(Long noteId) {
         try {
             return jdbcTemplate.query("SELECT id, text FROM tag WHERE id IN (SELECT tag_id FROM note_tag WHERE  note_id = ?)", new TagResponseRowMapper(), noteId);

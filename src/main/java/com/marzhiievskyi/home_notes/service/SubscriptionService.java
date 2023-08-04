@@ -50,6 +50,8 @@ public class SubscriptionService {
                     .build();
         }
 
+        commonService.checkBlockUserByUserId(subscriberUserId, publisherUserId);
+
         subscriptionDao.subscription(subscriberUserId, publisherUserId);
         return new ResponseEntity<>(SuccessResponse.builder().build(), HttpStatus.OK);
     }

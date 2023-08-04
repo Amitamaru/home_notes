@@ -15,4 +15,8 @@ public interface CommonDao {
     Long findUserIdIByTokenOrThrowException(String token);
 
     List<CommentResponseDto> getCommentsByNoteId(Long noteId);
+
+    boolean isBlocked(Long userId, Long checkBlockPublisher);
+
+    Long getUserIdByNoteId(long noteId);
 }

@@ -2,6 +2,7 @@ package com.marzhiievskyi.home_notes.service;
 
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.ReactionDao;
+import com.marzhiievskyi.home_notes.dao.SubscriptionDao;
 import com.marzhiievskyi.home_notes.domain.api.communication.comment.WhoseCommentDto;
 import com.marzhiievskyi.home_notes.domain.api.communication.comment.CommentNoteRequestDto;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
@@ -9,6 +10,7 @@ import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.domain.response.error.Error;
 import com.marzhiievskyi.home_notes.domain.response.error.ErrorResponse;
+import com.marzhiievskyi.home_notes.service.common.CommonService;
 import com.marzhiievskyi.home_notes.util.ValidationProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +25,16 @@ public class ReactionService {
 
     private final ReactionDao reactionDao;
     private final CommonDao commonDao;
+    private final SubscriptionDao subscriptionDao;
     private final ValidationProcessor validationProcessor;
+    private final CommonService commonService;
 
     public ResponseEntity<Response> likeNote(String accessToken, long noteId) {
 
         validationProcessor.validationDecimalMin("noteId", noteId, 1);
         Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
+
+        commonService.checkBlockUserByNoteId(userId, noteId);
 
         reactionDao.likeNote(userId, noteId);
         return new ResponseEntity<>(SuccessResponse.builder()
@@ -49,6 +55,8 @@ public class ReactionService {
 
         Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
         validationProcessor.validationRequest(commentNoteRequest);
+
+        commonService.checkBlockUserByNoteId(userId, commentNoteRequest.getNoteId());
 
         reactionDao.commentNote(userId, commentNoteRequest);
         return new ResponseEntity<>(SuccessResponse.builder().build(), HttpStatus.OK);
@@ -72,5 +80,24 @@ public class ReactionService {
                     .build(), HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    public ResponseEntity<Response> blockUser(String accessToken, Long blockUserId) {
+
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
+        validationProcessor.validationDecimalMin("blockUserId", blockUserId, 1);
+
+        if (userId.equals(blockUserId)) {
+            return new ResponseEntity<>(ErrorResponse.builder()
+                    .error(Error.builder()
+                            .code(Code.NOT_BLOCK_YOURSELF)
+                            .userMessage("you can not block your self")
+                            .build())
+                    .build(), HttpStatus.BAD_REQUEST);
+        }
+
+        reactionDao.blockUser(userId, blockUserId);
+        subscriptionDao.unsubscription(userId, blockUserId);
+        return new ResponseEntity<>(SuccessResponse.builder().build(), HttpStatus.OK);
     }
 }

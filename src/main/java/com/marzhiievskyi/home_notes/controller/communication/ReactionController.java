@@ -42,6 +42,12 @@ public class ReactionController {
             @PathVariable Long commentId) {
         return reactionService.deleteComment(accessToken, commentId);
     }
+    @PostMapping("/blockUser/{blockUserId}")
+    public ResponseEntity<Response> blockUser(
+            @RequestHeader final String accessToken,
+            @PathVariable Long blockUserId) {
+        return reactionService.blockUser(accessToken, blockUserId);
+    }
 
 
 }

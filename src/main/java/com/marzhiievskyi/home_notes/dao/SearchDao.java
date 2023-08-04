@@ -15,9 +15,9 @@ public interface SearchDao {
 
     List<TagResponseDto> getTagsByTagPart(String partTag);
 
-    List<NoteResponseDto> getNotesByTag(SearchNoteByTagRequestDto searchNoteByTagRequestDto);
+    List<NoteResponseDto> getNotesByTag(SearchNoteByTagRequestDto searchNoteByTagRequestDto, Long userId);
 
-    List<NoteResponseDto> findNotesByPartWord(SearchNotesByWordRequestDto searchNotesByWordRequestDto);
+    List<NoteResponseDto> findNotesByPartWord(SearchNotesByWordRequestDto searchNotesByWordRequestDto, Long userId);
 
     List<UserResponseDto> getUsersByNicknamePart(SearchUserByNicknameRequestDto searchUserRequest);
 }

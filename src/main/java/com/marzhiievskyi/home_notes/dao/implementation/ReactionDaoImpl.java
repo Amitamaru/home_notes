@@ -69,4 +69,9 @@ public class ReactionDaoImpl extends JdbcDaoSupport implements ReactionDao {
     public void deleteComment(Long commentId) {
         jdbcTemplate.update("DELETE FROM comment WHERE comment.id = ?", commentId);
     }
+
+    @Override
+    public void blockUser(Long userId, Long blockUserId) {
+        jdbcTemplate.update("INSERT IGNORE block(user_id, block_user_id) VALUES (?, ?)", userId, blockUserId);
+    }
 }

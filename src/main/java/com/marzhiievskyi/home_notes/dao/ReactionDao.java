@@ -14,4 +14,6 @@ public interface ReactionDao {
     WhoseCommentDto checkWhoseComment(Long commentId);
 
     void deleteComment(Long commentId);
+
+    void blockUser(Long userId, Long blockUserId);
 }
