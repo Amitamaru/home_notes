@@ -1,6 +1,8 @@
 package com.marzhiievskyi.home_notes.dao.implementation;
 
 import com.marzhiievskyi.home_notes.dao.ReactionDao;
+import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.common.UserResponseRowMapper;
 import com.marzhiievskyi.home_notes.domain.api.communication.comment.WhoseCommentDto;
 import com.marzhiievskyi.home_notes.domain.api.communication.comment.WhoseCommentRowMapper;
 import com.marzhiievskyi.home_notes.domain.api.communication.comment.CommentNoteRequestDto;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -73,5 +76,10 @@ public class ReactionDaoImpl extends JdbcDaoSupport implements ReactionDao {
     @Override
     public void blockUser(Long userId, Long blockUserId) {
         jdbcTemplate.update("INSERT IGNORE block(user_id, block_user_id) VALUES (?, ?)", userId, blockUserId);
+    }
+
+    @Override
+    public List<UserResponseDto> getMyBlockedUsers(Long userId) {
+        return jdbcTemplate.query("SELECT id, nickname FROM user WHERE id IN (SELECT block_user_id FROM  block WHERE  user_id = ?)", new UserResponseRowMapper(), userId);
     }
 }

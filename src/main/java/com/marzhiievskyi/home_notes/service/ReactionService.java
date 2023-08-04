@@ -3,6 +3,8 @@ package com.marzhiievskyi.home_notes.service;
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.ReactionDao;
 import com.marzhiievskyi.home_notes.dao.SubscriptionDao;
+import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
+import com.marzhiievskyi.home_notes.domain.api.communication.blocked.BlockedUsersResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.communication.comment.WhoseCommentDto;
 import com.marzhiievskyi.home_notes.domain.api.communication.comment.CommentNoteRequestDto;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
@@ -17,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -99,5 +103,17 @@ public class ReactionService {
         reactionDao.blockUser(userId, blockUserId);
         subscriptionDao.unsubscription(userId, blockUserId);
         return new ResponseEntity<>(SuccessResponse.builder().build(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Response> getMyBlockedUsers(String accessToken) {
+
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
+
+        List<UserResponseDto> blockedUsers = reactionDao.getMyBlockedUsers(userId);
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(BlockedUsersResponseDto.builder()
+                        .blockedUsers(blockedUsers)
+                        .build())
+                .build(), HttpStatus.OK);
     }
 }

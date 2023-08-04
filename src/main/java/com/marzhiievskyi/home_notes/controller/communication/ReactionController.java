@@ -36,12 +36,14 @@ public class ReactionController {
             @RequestBody final CommentNoteRequestDto commentNoteRequest) {
         return reactionService.commentNote(accessToken, commentNoteRequest);
     }
+
     @DeleteMapping("/deleteComment/{commentId}")
     public ResponseEntity<Response> deleteComment(
             @RequestHeader final String accessToken,
             @PathVariable Long commentId) {
         return reactionService.deleteComment(accessToken, commentId);
     }
+
     @PostMapping("/blockUser/{blockUserId}")
     public ResponseEntity<Response> blockUser(
             @RequestHeader final String accessToken,
@@ -49,5 +51,9 @@ public class ReactionController {
         return reactionService.blockUser(accessToken, blockUserId);
     }
 
+    @GetMapping("/getBlockedUsers")
+    public ResponseEntity<Response> getBlockedUsers(@RequestHeader final String accessToken) {
+        return reactionService.getMyBlockedUsers(accessToken);
+    }
 
 }
