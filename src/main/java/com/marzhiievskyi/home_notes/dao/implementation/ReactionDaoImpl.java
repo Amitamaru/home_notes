@@ -82,4 +82,9 @@ public class ReactionDaoImpl extends JdbcDaoSupport implements ReactionDao {
     public List<UserResponseDto> getMyBlockedUsers(Long userId) {
         return jdbcTemplate.query("SELECT id, nickname FROM user WHERE id IN (SELECT block_user_id FROM  block WHERE  user_id = ?)", new UserResponseRowMapper(), userId);
     }
+
+    @Override
+    public void unblockUser(Long userId, Long unblockUserId) {
+        jdbcTemplate.update("DELETE FROM block WHERE user_id = ? AND block_user_id = ?", userId, unblockUserId);
+    }
 }

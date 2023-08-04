@@ -21,4 +21,6 @@ public interface ReactionDao {
     void blockUser(Long userId, Long blockUserId);
 
     List<UserResponseDto> getMyBlockedUsers(Long userId);
+
+    void unblockUser(Long userId, Long unblockUserId);
 }

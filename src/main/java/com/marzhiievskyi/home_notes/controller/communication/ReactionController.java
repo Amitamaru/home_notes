@@ -44,7 +44,7 @@ public class ReactionController {
         return reactionService.deleteComment(accessToken, commentId);
     }
 
-    @PostMapping("/blockUser/{blockUserId}")
+    @DeleteMapping("/blockUser/{blockUserId}")
     public ResponseEntity<Response> blockUser(
             @RequestHeader final String accessToken,
             @PathVariable Long blockUserId) {
@@ -54,6 +54,12 @@ public class ReactionController {
     @GetMapping("/getBlockedUsers")
     public ResponseEntity<Response> getBlockedUsers(@RequestHeader final String accessToken) {
         return reactionService.getMyBlockedUsers(accessToken);
+    }
+    @DeleteMapping("/unblockUser/{unblockUserId}")
+    public ResponseEntity<Response> unblockUser(
+            @RequestHeader final String accessToken,
+            @PathVariable Long unblockUserId) {
+        return reactionService.unblockUser(accessToken, unblockUserId);
     }
 
 }

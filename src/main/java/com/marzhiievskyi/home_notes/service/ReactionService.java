@@ -116,4 +116,13 @@ public class ReactionService {
                         .build())
                 .build(), HttpStatus.OK);
     }
+
+    public ResponseEntity<Response> unblockUser(String accessToken, Long unblockUserId) {
+
+        validationProcessor.validationDecimalMin("unblockUserId", unblockUserId, 1);
+        Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
+
+        reactionDao.unblockUser(userId, unblockUserId);
+        return new ResponseEntity<>(SuccessResponse.builder().build(), HttpStatus.OK);
+    }
 }
