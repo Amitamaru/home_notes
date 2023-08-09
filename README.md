@@ -1,8 +1,8 @@
 # HOME NOTES
 ### In resources, you can find documentation 
-### works with Swagger-UI 
-http://localhost:8080/swagger-ui/index.html <br/>
+application ver. 1.0.1 release, deployed on railway https://railway.app hosting<br/>
 
+you can test using postman, following documentation, on https://homenotes-production.up.railway.app
 
 application environments:<br/>
  - MYSQL_HOST=mysql_host

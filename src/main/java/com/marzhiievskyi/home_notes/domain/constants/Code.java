@@ -16,6 +16,5 @@ public enum Code {
     NOT_SUPPORTED,
     NOT_YOUR_COMMENT,
     NOT_BLOCK_YOURSELF,
-    BLOCKED,
-    NO_DATA
+    BLOCKED
 }
