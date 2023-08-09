@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class HomeNotesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HomeNotesApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(HomeNotesApplication.class, args);
+    }
 
 }
