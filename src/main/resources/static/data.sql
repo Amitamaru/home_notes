@@ -1,5 +1,5 @@
 
-CREATE TABLE IF NOT EXISTS user
+CREATE TABLE IF NOT EXISTS home_notes.user
 (
     id           BIGINT AUTO_INCREMENT,
     nickname     VARCHAR(15)  NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS user
     UNIQUE KEY `access_token` (`access_token`)
 ) COLLATE UTF8MB4_bin;
 
-CREATE TABLE IF NOT EXISTS note
+CREATE TABLE IF NOT EXISTS home_notes.note
 (
     id          BIGINT AUTO_INCREMENT,
     user_id     BIGINT NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS note
     FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COLLATE UTF8MB4_bin;
 
-CREATE TABLE IF NOT EXISTS tag
+CREATE TABLE IF NOT EXISTS home_notes.tag
 (
     id          BIGINT AUTO_INCREMENT,
     text        VARCHAR(25) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS tag
 ) COLLATE UTF8MB4_bin;
 INSERT INTO tag(text) VALUE ('mustBe=)');
 
-CREATE TABLE IF NOT EXISTS note_tag
+CREATE TABLE IF NOT EXISTS home_notes.note_tag
 (
     id          BIGINT AUTO_INCREMENT,
     note_id     BIGINT NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS note_tag
     UNIQUE `phrase_id_tag_id` (`note_id`, `tag_id`)
 ) COLLATE UTF8MB4_bin;
 
-CREATE TABLE IF NOT EXISTS subscription
+CREATE TABLE IF NOT EXISTS home_notes.subscription
 (
     id          BIGINT AUTO_INCREMENT,
     sub_user_id BIGINT    NOT NULL,
@@ -53,9 +53,9 @@ CREATE TABLE IF NOT EXISTS subscription
     FOREIGN KEY (sub_user_id) REFERENCES user (id),
     FOREIGN KEY (pub_user_id) REFERENCES user (id),
     UNIQUE KEY sub_user_id_pub_user_id (sub_user_id, pub_user_id)
-) COLLATE utf8_bin;
+) COLLATE UTF8MB4_bin;
 
-CREATE TABLE IF NOT EXISTS like_note
+CREATE TABLE IF NOT EXISTS home_notes.like_note
 (
     id          BIGINT AUTO_INCREMENT,
     note_id     BIGINT    NOT NULL,
@@ -65,9 +65,9 @@ CREATE TABLE IF NOT EXISTS like_note
     FOREIGN KEY (note_id) REFERENCES note (id),
     FOREIGN KEY (user_id) REFERENCES user (id),
     UNIQUE `phrase_id_user_id` (`note_id`, `user_id`)
-) COLLATE utf8_bin;
+) COLLATE UTF8MB4_bin;
 
-CREATE TABLE IF NOT EXISTS comment
+CREATE TABLE IF NOT EXISTS home_notes.comment
 (
     id          BIGINT AUTO_INCREMENT,
     user_id     BIGINT       NOT NULL,
@@ -77,9 +77,9 @@ CREATE TABLE IF NOT EXISTS comment
     PRIMARY KEY (id),
     FOREIGN KEY (note_id) REFERENCES note (id),
     FOREIGN KEY (user_id) REFERENCES user (id)
-) COLLATE utf8_bin;
+) COLLATE UTF8MB4_bin;
 
-CREATE TABLE IF NOT EXISTS block
+CREATE TABLE IF NOT EXISTS home_notes.block
 (
     id              BIGINT AUTO_INCREMENT,
     user_id         BIGINT    NOT NULL,
@@ -89,4 +89,4 @@ CREATE TABLE IF NOT EXISTS block
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (block_user_id) REFERENCES user (id),
     UNIQUE user_id_block_user_id (user_id, block_user_id)
-) COLLATE utf8_bin;
+) COLLATE UTF8MB4_bin;
