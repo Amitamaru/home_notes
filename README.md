@@ -14,3 +14,4 @@ application environments:<br/>
 --In development--
 - Change username and password
 - Private messages
+- Get random notes
