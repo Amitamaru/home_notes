@@ -1,4 +1,4 @@
-package com.marzhiievskyi.home_notes.service.common;
+package com.marzhiievskyi.home_notes.common;
 
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;

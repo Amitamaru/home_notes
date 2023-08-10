@@ -16,7 +16,7 @@ import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameR
 import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameResponseDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
-import com.marzhiievskyi.home_notes.service.common.CommonService;
+import com.marzhiievskyi.home_notes.common.CommonService;
 import com.marzhiievskyi.home_notes.util.ValidationProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
