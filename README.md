@@ -14,3 +14,8 @@ application environments:<br/>
 --In development--
 - Change username and password
 - Private messages
+- Get random notes (as welcome page)
+
+--Planing--
+- Add email to the registration
+
