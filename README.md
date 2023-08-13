@@ -11,10 +11,13 @@ application environments:<br/>
  - MYSQL_USER=mysql_username
  - MYSQL_PASSWORD=mysql_password
 
+--Done new features--
+- Get last random notes (as welcome page)
+
 --In development--
 - Change username and password
 - Private messages
-- Get random notes (as welcome page)
+
 
 --Planing--
 - Add email to the registration
