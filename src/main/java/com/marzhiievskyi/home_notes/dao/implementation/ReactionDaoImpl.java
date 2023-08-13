@@ -42,7 +42,7 @@ public class ReactionDaoImpl extends JdbcDaoSupport implements ReactionDao {
     }
 
     @Override
-    public void disLikeNote(Long userId, long noteId) {
+    public void deleteLike(Long userId, long noteId) {
         jdbcTemplate.update("DELETE FROM like_note WHERE note_id = ? AND  user_id = ?", noteId, userId);
     }
 

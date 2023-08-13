@@ -23,11 +23,11 @@ public class ReactionController {
         return reactionService.likeNote(accessToken, noteId);
     }
 
-    @DeleteMapping("/disLikeNote/{noteId}")
-    public ResponseEntity<Response> disLikeNote(
+    @DeleteMapping("/deleteLike/{noteId}")
+    public ResponseEntity<Response> deleteLike(
             @RequestHeader final String accessToken,
             @PathVariable long noteId) {
-        return reactionService.disLikeNote(accessToken, noteId);
+        return reactionService.deleteLike(accessToken, noteId);
     }
 
     @PostMapping("/commentNote")
