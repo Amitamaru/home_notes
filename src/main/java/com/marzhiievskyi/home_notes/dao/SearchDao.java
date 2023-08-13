@@ -20,4 +20,6 @@ public interface SearchDao {
     List<NoteResponseDto> findNotesByPartWord(SearchNotesByWordRequestDto searchNotesByWordRequestDto, Long userId);
 
     List<UserResponseDto> getUsersByNicknamePart(SearchUserByNicknameRequestDto searchUserRequest);
+
+    List<NoteResponseDto> findNotesFromToLimit(int from, int limit);
 }
