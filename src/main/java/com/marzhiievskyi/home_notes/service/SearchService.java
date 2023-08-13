@@ -1,5 +1,6 @@
 package com.marzhiievskyi.home_notes.service;
 
+import com.marzhiievskyi.home_notes.common.CommonService;
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.SearchDao;
 import com.marzhiievskyi.home_notes.dao.UserDao;
@@ -16,7 +17,6 @@ import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameR
 import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameResponseDto;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
-import com.marzhiievskyi.home_notes.service.common.CommonService;
 import com.marzhiievskyi.home_notes.util.ValidationProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -108,6 +108,21 @@ public class SearchService {
         return new ResponseEntity<>(SuccessResponse.builder()
                 .data(NoteListResponse.builder()
                         .notes(notesByUserId)
+                        .build())
+                .build(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Response> findNotesFromToLimit(int from, int limit) {
+
+        validationProcessor.validationDecimalMin("from", from, 0);
+        validationProcessor.validationDecimalMin("limit", limit, 1);
+
+        List<NoteResponseDto> lastAddedNotes = searchDao.findNotesFromToLimit(from, limit);
+        commonService.insertDataIntoNotes(lastAddedNotes);
+
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .data(NoteListResponse.builder()
+                        .notes(lastAddedNotes)
                         .build())
                 .build(), HttpStatus.OK);
     }

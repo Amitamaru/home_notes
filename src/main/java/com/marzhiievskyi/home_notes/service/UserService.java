@@ -1,5 +1,6 @@
 package com.marzhiievskyi.home_notes.service;
 
+import com.marzhiievskyi.home_notes.common.CommonService;
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.implementation.UserDaoImpl;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteListResponse;
@@ -13,7 +14,6 @@ import com.marzhiievskyi.home_notes.domain.constants.Code;
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
-import com.marzhiievskyi.home_notes.service.common.CommonService;
 import com.marzhiievskyi.home_notes.util.EncryptProcessor;
 import com.marzhiievskyi.home_notes.util.ValidationProcessor;
 import lombok.RequiredArgsConstructor;

@@ -94,4 +94,13 @@ public class SearchDaoImpl extends JdbcDaoSupport implements SearchDao {
                 searchUserRequest.getPartNickname(),
                 searchUserRequest.getPartNickname());
     }
+
+    @Override
+    public List<NoteResponseDto> findNotesFromToLimit(int from, int limit) {
+        return jdbcTemplate.query("SELECT  note.id AS note_id, note.text, note.time_insert, note.user_id, u.nickname AS nickname " +
+                "FROM note " +
+                "    JOIN user u ON u.id = note.user_id " +
+                "ORDER BY note.time_insert DESC " +
+                "LIMIT ?,?", new NoteResponseRowMapper(), from, limit);
+    }
 }
