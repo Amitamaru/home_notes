@@ -25,4 +25,6 @@ public interface UserDao {
 
     List<NoteResponseDto> getNotesByUserId(Long userId);
 
+    void removeUser(String nickname);
+
 }

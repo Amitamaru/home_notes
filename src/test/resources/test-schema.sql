@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS user
 (
     id           BIGINT AUTO_INCREMENT,
@@ -29,7 +28,6 @@ CREATE TABLE IF NOT EXISTS tag
     PRIMARY KEY (`id`),
     UNIQUE (text)
 ) COLLATE UTF8MB4_bin;
-INSERT INTO tag(text) VALUE ('mustBe=)');
 
 CREATE TABLE IF NOT EXISTS note_tag
 (
