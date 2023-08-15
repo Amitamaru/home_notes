@@ -1,4 +1,4 @@
-package com.marzhiievskyi.home_notes.controller;
+package com.marzhiievskyi.home_notes.controller.commonController;
 
 import com.marzhiievskyi.home_notes.AbstractControllerTest;
 import com.marzhiievskyi.home_notes.service.SearchService;
@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class CommonControllerIT extends AbstractControllerTest {
+public class CommonControllerITest extends AbstractControllerTest {
 
     @Autowired
     SearchService searchService;
