@@ -1,6 +1,7 @@
 package com.marzhiievskyi.home_notes.controller;
 
 import com.marzhiievskyi.home_notes.AbstractControllerTest;
+import com.marzhiievskyi.home_notes.dao.SearchDao;
 import com.marzhiievskyi.home_notes.dao.UserDao;
 import com.marzhiievskyi.home_notes.domain.api.common.UserDto;
 import com.marzhiievskyi.home_notes.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserControllerIT extends AbstractControllerTest {
@@ -31,14 +33,24 @@ public class UserControllerIT extends AbstractControllerTest {
     UserDao userDao;
     @Autowired
     EncryptProcessor encryptProcessor;
+    @Autowired
+    SearchDao searchDao;
 
     @AfterEach
     void tearDown() {
         userDao.removeUser(USER_NICKNAME);
     }
 
+    private void prepareUser() {
+        userDao.insertNewUser(UserDto.builder()
+                .nickname(USER_NICKNAME)
+                .encryptedPassword(encryptProcessor.encryptPassword(USER_PASSWORD))
+                .accessToken(encryptProcessor.generateAccessToken())
+                .build());
+    }
+
     @Test
-    public void registrationNewUser_PayloadsValid_returnsValidResponseEntity() throws Exception {
+    public void registrationNewUser_payloadsValid_returnsValidResponseEntity() throws Exception {
         //given
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_REGISTRATION_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -46,7 +58,7 @@ public class UserControllerIT extends AbstractControllerTest {
                         {
                           "authorization": {
                             "nickname": "amitamaru",
-                            "password": "123456789"
+                            "password": "1234567890"
                           }
                         }
                         """);
@@ -58,23 +70,20 @@ public class UserControllerIT extends AbstractControllerTest {
                         content().contentType(MediaType.APPLICATION_JSON),
                         jsonPath("$.data.accessToken").exists()
                 );
+        assertEquals(USER_NICKNAME, searchDao.getUsersByNicknamePart(USER_NICKNAME).get(0).getNickname());
     }
 
     @Test
     public void registrationNewUser_PayloadsInvalid_returnsErrorResponseEntity() throws Exception {
         //given
-        userDao.insertNewUser(UserDto.builder()
-                .nickname(USER_NICKNAME)
-                .encryptedPassword(encryptProcessor.encryptPassword(USER_PASSWORD))
-                .accessToken(encryptProcessor.generateAccessToken())
-                .build());
+        prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_REGISTRATION_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
                           "authorization": {
                             "nickname": "amitamaru",
-                            "password": "123456789"
+                            "password": "1234567890"
                           }
                         }
                         """);
@@ -93,5 +102,32 @@ public class UserControllerIT extends AbstractControllerTest {
                                   }
                                 """)
                 );
+    }
+
+
+
+    @Test
+    public void loginUser_payloadsValid_returnsValidResponse() throws Exception {
+        //given
+        prepareUser();
+        var requestBuilder = MockMvcRequestBuilders.post(REST_USER_LOGIN_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                          "authorization": {
+                            "nickname": "amitamaru",
+                            "password": "1234567890"
+                          }
+                        }
+                        """);
+        //when
+        perform(requestBuilder)
+                //then
+                .andExpectAll(
+                        status().isOk(),
+                        content().contentType(MediaType.APPLICATION_JSON),
+                        jsonPath("$.data.accessToken").exists()
+                );
+        assertEquals(USER_NICKNAME, searchDao.getUsersByNicknamePart(USER_NICKNAME).get(0).getNickname());
     }
 }

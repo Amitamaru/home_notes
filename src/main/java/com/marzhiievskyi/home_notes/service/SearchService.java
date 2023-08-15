@@ -86,7 +86,8 @@ public class SearchService {
         validationProcessor.validationRequest(searchUserRequest);
         commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
-        List<UserResponseDto> users = searchDao.getUsersByNicknamePart(searchUserRequest);
+
+        List<UserResponseDto> users = searchDao.getUsersByNicknamePart(searchUserRequest.getPartNickname());
 
         return new ResponseEntity<>(SuccessResponse.builder()
                 .data(SearchUserByNicknameResponseDto.builder()

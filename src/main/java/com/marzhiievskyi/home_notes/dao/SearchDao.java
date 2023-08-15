@@ -5,7 +5,6 @@ import com.marzhiievskyi.home_notes.domain.api.common.TagResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.common.UserResponseDto;
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteByTagRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNotesByWordRequestDto;
-import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameRequestDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public interface SearchDao {
 
     List<NoteResponseDto> findNotesByPartWord(SearchNotesByWordRequestDto searchNotesByWordRequestDto, Long userId);
 
-    List<UserResponseDto> getUsersByNicknamePart(SearchUserByNicknameRequestDto searchUserRequest);
+    List<UserResponseDto> getUsersByNicknamePart(String partOfNickname);
 
     List<NoteResponseDto> findNotesFromToLimit(int from, int limit);
 }

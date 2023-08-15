@@ -1,5 +1,6 @@
 package com.marzhiievskyi.home_notes.service;
 
+import com.marzhiievskyi.home_notes.domain.api.user.login.LoginResponseUserDto;
 import com.marzhiievskyi.home_notes.service.common.CommonService;
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.implementation.UserDaoImpl;
@@ -69,7 +70,9 @@ public class UserService {
                 .build());
 
         return new ResponseEntity<>(SuccessResponse.builder()
-                .data(accessToken)
+                .data(LoginResponseUserDto.builder()
+                        .accessToken(accessToken)
+                        .build())
                 .build(), HttpStatus.OK);
     }
 
