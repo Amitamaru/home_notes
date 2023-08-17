@@ -252,4 +252,6 @@ public class UserControllerITest extends AbstractControllerTest {
                                 """)
                 );
     }
+
+    //TODO add change login pass test
 }

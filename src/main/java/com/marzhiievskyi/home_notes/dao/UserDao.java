@@ -27,4 +27,5 @@ public interface UserDao {
 
     void removeUser(String nickname);
 
+    void updateUser(Long userId, UserDto userDto);
 }

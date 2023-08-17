@@ -69,6 +69,11 @@ public class CommonDaoImpl extends JdbcDaoSupport implements CommonDao {
     }
 
     @Override
+    public String findUserNicknameById(Long userId) {
+        return jdbcTemplate.queryForObject("SELECT nickname FROM user WHERE id = ?", String.class, userId);
+    }
+
+    @Override
     public Long getUserIdByNoteId(long noteId) {
         return jdbcTemplate.queryForObject("SELECT user_id FROM note WHERE id = ?", Long.class, noteId);
     }
