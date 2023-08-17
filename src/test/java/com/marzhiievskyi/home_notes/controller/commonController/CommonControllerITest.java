@@ -4,7 +4,6 @@ import com.marzhiievskyi.home_notes.AbstractControllerTest;
 import com.marzhiievskyi.home_notes.controller.service.CommonTestService;
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.UserDao;
-import com.marzhiievskyi.home_notes.domain.api.common.UserDto;
 import com.marzhiievskyi.home_notes.service.SearchService;
 import com.marzhiievskyi.home_notes.util.EncryptProcessor;
 import org.junit.jupiter.api.AfterEach;
@@ -36,11 +35,7 @@ public class CommonControllerITest extends AbstractControllerTest {
     CommonTestService commonTestService;
 
     public void prepareData() {
-        userDao.insertNewUser(UserDto.builder()
-                .nickname(USER_NICKNAME)
-                .encryptedPassword(encryptProcessor.encryptPassword(USER_PASSWORD))
-                .accessToken(USER_ACCESS_TOKEN)
-                .build());
+        commonTestService.prepareUser();
         userDao.addNoteByUserId(NOTE_TEXT, commonDao.findUserIdIByTokenOrThrowException(USER_ACCESS_TOKEN));
         userDao.addNoteByUserId(NOTE2_TEXT, commonDao.findUserIdIByTokenOrThrowException(USER_ACCESS_TOKEN));
 
@@ -48,7 +43,7 @@ public class CommonControllerITest extends AbstractControllerTest {
 
     @AfterEach
     public void tearDown() {
-        commonTestService.tearDown();
+        commonTestService.clearData();
     }
 
     @Test

@@ -18,7 +18,7 @@ public class CommonTestService {
     @Autowired
     EncryptProcessor encryptProcessor;
 
-    public void tearDown() {
+    public void clearData() {
         userDao.removeUser(USER_NICKNAME);
         commonDao.removeNotesByText(NOTE_TEXT);
         commonDao.removeNotesByText(NOTE2_TEXT);

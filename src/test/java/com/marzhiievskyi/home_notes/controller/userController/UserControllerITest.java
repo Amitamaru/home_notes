@@ -38,7 +38,7 @@ public class UserControllerITest extends AbstractControllerTest {
 
     @AfterEach
     void tearDown() {
-        commonTestService.tearDown();
+        commonTestService.clearData();
     }
 
 
