@@ -1,11 +1,10 @@
 package com.marzhiievskyi.home_notes.controller.userController;
 
 import com.marzhiievskyi.home_notes.AbstractControllerTest;
+import com.marzhiievskyi.home_notes.controller.service.CommonTestService;
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.UserDao;
-import com.marzhiievskyi.home_notes.domain.api.common.UserDto;
 import com.marzhiievskyi.home_notes.service.UserService;
-import com.marzhiievskyi.home_notes.util.EncryptProcessor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,26 +30,17 @@ public class UserControllerITest extends AbstractControllerTest {
     @Autowired
     UserDao userDao;
     @Autowired
-    EncryptProcessor encryptProcessor;
-    @Autowired
     CommonDao commonDao;
+    @Autowired
+    CommonTestService commonTestService;
 
 
 
     @AfterEach
     void tearDown() {
-        userDao.removeUser(USER_NICKNAME);
-        commonDao.removeNotesByText(NOTE_TEXT);
-        commonDao.removeNotesByText(NOTE2_TEXT);
+        commonTestService.tearDown();
     }
 
-    private void prepareUser() {
-        userDao.insertNewUser(UserDto.builder()
-                .nickname(USER_NICKNAME)
-                .encryptedPassword(encryptProcessor.encryptPassword(USER_PASSWORD))
-                .accessToken(USER_ACCESS_TOKEN)
-                .build());
-    }
 
     private void prepareNotes() {
         userDao.addNoteByUserId(NOTE_TEXT, commonDao.findUserIdIByTokenOrThrowException(USER_ACCESS_TOKEN));
@@ -85,7 +75,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void registrationNewUser_payloadsInvalid_returnsErrorResponseEntity() throws Exception {
         //given
-        prepareUser();
+        commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_REGISTRATION_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -117,7 +107,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void loginUser_payloadsValid_returnsValidResponse() throws Exception {
         //given
-        prepareUser();
+        commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_LOGIN_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -142,7 +132,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void loginUser_payloadsWrongUser_returnsErrorResponseEntity() throws Exception {
         //given
-        prepareUser();
+        commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_LOGIN_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -173,7 +163,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void publicNote_payloadsValid() throws Exception {
         //given
-        prepareUser();
+        commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_PUBLIC_NOTE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("accessToken", USER_ACCESS_TOKEN)
@@ -200,7 +190,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void publicNote_payloadsWrongUser_ReturnsErrorEntity() throws Exception {
         //given
-        prepareUser();
+        commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_PUBLIC_NOTE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("accessToken", "wrongAccessToken")
@@ -234,7 +224,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void getMyNotes_returnsValidResponse() throws Exception {
         //given
-        prepareUser();
+        commonTestService.prepareUser();
         prepareNotes();
         var requestBuilder = MockMvcRequestBuilders.get(REST_USER_GET_MY_NOTES_URL)
                 .header("accessToken", USER_ACCESS_TOKEN);

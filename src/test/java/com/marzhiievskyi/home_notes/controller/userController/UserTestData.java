@@ -14,14 +14,5 @@ public class UserTestData {
 
 
 
-    public static final String JSON_USER_AUTHORIZATION_REQUEST = """
-                        {
-                          "authorization": {
-                            "nickname": "amitamaru",
-                            "password": "1234567890"
-                          }
-                        }
-                        """;
-
 
 }
