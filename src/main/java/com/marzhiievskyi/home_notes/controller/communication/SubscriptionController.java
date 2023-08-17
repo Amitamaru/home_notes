@@ -5,11 +5,9 @@ import com.marzhiievskyi.home_notes.domain.api.communication.subscription.Unsubs
 import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/home-notes/communication/")
