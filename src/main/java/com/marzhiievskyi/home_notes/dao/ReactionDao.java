@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface ReactionDao {
     void likeNote(Long userId, long noteId);
-    void disLikeNote(Long userId, long noteId);
+    void deleteLike(Long userId, long noteId);
 
     void commentNote(Long userId, CommentNoteRequestDto commentNoteRequest);
 

@@ -1,6 +1,7 @@
-package com.marzhiievskyi.home_notes.common;
+package com.marzhiievskyi.home_notes.service.common;
 
 import com.marzhiievskyi.home_notes.dao.CommonDao;
+import com.marzhiievskyi.home_notes.dao.UserDao;
 import com.marzhiievskyi.home_notes.domain.api.common.NoteResponseDto;
 import com.marzhiievskyi.home_notes.domain.constants.Code;
 import com.marzhiievskyi.home_notes.domain.response.error.exception.CommonException;
@@ -17,6 +18,7 @@ import java.util.List;
 public class CommonService {
 
     private final CommonDao commonDao;
+    private final UserDao userDao;
 
     public void insertDataIntoNotes(List<NoteResponseDto> notes) {
         for (NoteResponseDto note : notes) {
@@ -39,6 +41,17 @@ public class CommonService {
                     .build();
         }
     }
+
+    public void checkUserNickname(String nickname) {
+        if (userDao.isExistNickname(nickname)) {
+            throw CommonException.builder()
+                    .code(Code.NICKNAME_BUSY)
+                    .userMessage("this nickname is busy please enter another")
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+    }
+
 
     public void checkBlockUserByNoteId(Long userId, long noteId) {
         Long checkBlockPublisher = commonDao.getUserIdByNoteId(noteId);

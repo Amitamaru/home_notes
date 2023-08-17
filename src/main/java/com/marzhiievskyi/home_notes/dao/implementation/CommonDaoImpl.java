@@ -74,6 +74,26 @@ public class CommonDaoImpl extends JdbcDaoSupport implements CommonDao {
     }
 
     @Override
+    public String findNoteTextLikeGiven(String text) {
+        return jdbcTemplate.queryForObject("SELECT text FROM note WHERE text LIKE ?", String.class, text);
+    }
+
+    @Override
+    public String findTagTextLikeGiven(String text) {
+        return jdbcTemplate.queryForObject("SELECT text FROM tag WHERE text LIKE ?", String.class, text);
+    }
+
+    @Override
+    public String findUserNicknameByGiven(String nickname) {
+        return jdbcTemplate.queryForObject("SELECT nickname FROM user WHERE nickname LIKE ?", String.class, nickname);
+    }
+
+    @Override
+    public void removeNotesByText(String noteText) {
+        jdbcTemplate.update("DELETE FROM note WHERE text LIKE ?", noteText);
+    }
+
+    @Override
     public List<TagResponseDto> getTagsByNoteId(Long noteId) {
         try {
             return jdbcTemplate.query("SELECT id, text FROM tag WHERE id IN (SELECT tag_id FROM note_tag WHERE  note_id = ?)", new TagResponseRowMapper(), noteId);

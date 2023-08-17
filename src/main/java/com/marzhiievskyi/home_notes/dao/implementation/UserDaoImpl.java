@@ -107,4 +107,8 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
                                         "WHERE user_id = ? " +
                                         "ORDER BY time_insert DESC ", new NoteResponseRowMapper(), userId);
     }
+
+    public void removeUser(String nickname) {
+        jdbcTemplate.update("DELETE FROM user WHERE nickname = ?", nickname);
+    }
 }

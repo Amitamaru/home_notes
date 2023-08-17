@@ -4,7 +4,6 @@ import com.marzhiievskyi.home_notes.dao.SearchDao;
 import com.marzhiievskyi.home_notes.domain.api.common.*;
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNoteByTagRequestDto;
 import com.marzhiievskyi.home_notes.domain.api.search.note.SearchNotesByWordRequestDto;
-import com.marzhiievskyi.home_notes.domain.api.search.user.SearchUserByNicknameRequestDto;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +77,7 @@ public class SearchDaoImpl extends JdbcDaoSupport implements SearchDao {
     }
 
     @Override
-    public List<UserResponseDto> getUsersByNicknamePart(SearchUserByNicknameRequestDto searchUserRequest) {
+    public List<UserResponseDto> getUsersByNicknamePart(String partOfNickname) {
         return jdbcTemplate.query("SELECT id, nickname " +
                         "FROM (" +
                         "       SELECT id, nickname " +
@@ -91,8 +90,8 @@ public class SearchDaoImpl extends JdbcDaoSupport implements SearchDao {
                         "       FROM user " +
                         "       WHERE nickname LIKE CONCAT('%', ?, '%')) u2 ",
                 new UserResponseRowMapper(),
-                searchUserRequest.getPartNickname(),
-                searchUserRequest.getPartNickname());
+                partOfNickname,
+                partOfNickname);
     }
 
     @Override

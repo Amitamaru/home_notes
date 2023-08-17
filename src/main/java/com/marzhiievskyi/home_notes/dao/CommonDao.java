@@ -18,5 +18,10 @@ public interface CommonDao {
 
     boolean isBlocked(Long userId, Long checkBlockPublisher);
 
+    //tests
     Long getUserIdByNoteId(long noteId);
+    String findNoteTextLikeGiven(String text);
+    String findTagTextLikeGiven(String text);
+    String findUserNicknameByGiven(String nickname);
+    void removeNotesByText(String noteText);
 }

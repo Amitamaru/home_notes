@@ -12,7 +12,7 @@ import com.marzhiievskyi.home_notes.domain.response.Response;
 import com.marzhiievskyi.home_notes.domain.response.SuccessResponse;
 import com.marzhiievskyi.home_notes.domain.response.error.Error;
 import com.marzhiievskyi.home_notes.domain.response.error.ErrorResponse;
-import com.marzhiievskyi.home_notes.common.CommonService;
+import com.marzhiievskyi.home_notes.service.common.CommonService;
 import com.marzhiievskyi.home_notes.util.ValidationProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,12 +45,12 @@ public class ReactionService {
                 .build(), HttpStatus.OK);
     }
 
-    public ResponseEntity<Response> disLikeNote(String accessToken, long noteId) {
+    public ResponseEntity<Response> deleteLike(String accessToken, long noteId) {
 
         validationProcessor.validationDecimalMin("noteId", noteId, 1);
         Long userId = commonDao.findUserIdIByTokenOrThrowException(accessToken);
 
-        reactionDao.disLikeNote(userId, noteId);
+        reactionDao.deleteLike(userId, noteId);
         return new ResponseEntity<>(SuccessResponse.builder()
                 .build(), HttpStatus.OK);
     }
