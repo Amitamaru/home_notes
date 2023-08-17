@@ -12,7 +12,7 @@ application environments:<br/>
  - MYSQL_PASSWORD=mysql_password
 
 --Done new features--
-- Get last random notes (as welcome page)
+- Get last notes (as welcome page)
 
 --In development--
 - Change username and password
