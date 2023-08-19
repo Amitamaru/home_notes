@@ -26,4 +26,5 @@ public interface CommonDao {
     String findTagTextLikeGiven(String text);
     String findUserNicknameByGiven(String nickname);
     void removeNotesByText(String noteText);
+    String findUserAccessTokenByNickname(String nickname);
 }
