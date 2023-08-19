@@ -22,7 +22,7 @@ service search by part of tag in table tag and returns tags and them ID<br/>
 at the beginning should be tags who begin from input part of tag in descending order of popularity<br/>
 after that tags that do not begin with the partTag<br/>
 
-**out coming data if access**<br/>
+**out coming data if saccess**<br/>
 status 200
 ```json
 {
@@ -62,7 +62,7 @@ service search notes by tagId and returns user array of notes: <br/>
 id note, user id, user nickname, note text, note tags, note time created, <br/>
 random or time created (from new to old) sort
 
-**out coming data if access**<br/>
+**out coming data if saccess**<br/>
 status 200
 ```json
 {
@@ -124,7 +124,7 @@ service search notes by partWord and returns user array of notes: <br/>
 id note, user id, user nickname, note text, note tags, note time created, <br/>
 random or time created (from new to old) sort
 
-**out coming data if access**<br/>
+**out coming data if saccess**<br/>
 status 200
 ```json
 {
@@ -184,7 +184,7 @@ service search nicknames by partNickname and return to user array of nickname an
 sorting - at first mus be nicknames which begins from partNickname<br/>
 
 
-**out coming data if access**<br/>
+**out coming data if saccess**<br/>
 status 200
 ```json
 {
@@ -221,7 +221,7 @@ userId >= 1
 service search user notes by userId and return list of notes<br/>
 If the user is not found, then return USER_NOT_FOUND<br/>
 
-**out coming data if access**<br/>
+**out coming data if saccess**<br/>
 status 200
 ```json
 {
@@ -265,7 +265,7 @@ status 200
   }
 }
 ```
-**out coming data if not access**<br/>
+**out coming data if not saccess**<br/>
 status 400
 ```json
 {
