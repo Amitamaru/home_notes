@@ -22,10 +22,10 @@ If finding the user is present service checks that the subscription is not prese
 If not service add a subscription.
 
 
-**out coming data if access**<br/>
+**out coming data if success**<br/>
 status 200
 
-**out coming data if not access**<br/>
+**out coming data if not success**<br/>
 status 400
 ```json
 {
@@ -67,7 +67,7 @@ pubUserId > 0
 **logic**<br/>
 service trying to delete subscription by incoming data
 
-**out coming data if access**<br/>
+**out coming data if success**<br/>
 status 200
 
 ## getMySubscribers method (auth)
@@ -77,7 +77,7 @@ status 200
 **logic**<br/>
 service returns user subscribers
 
-**out coming data if access**<br/>
+**out coming data if success**<br/>
 status 200
 
 ```json
@@ -104,7 +104,7 @@ status 200
 **logic**<br/>
 service returns users publishers
 
-**out coming data if access**<br/>
+**out coming data if success**<br/>
 status 200
 
 ```json
@@ -139,7 +139,7 @@ from >= 0, limit > 0
 **logic**<br/>
 service returns limit notes of user publishers from first. Sorted from new to old<br/>
 
-**out coming data if access**<br/>
+**out coming data if success**<br/>
 status 200
 ```json
 {

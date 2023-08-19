@@ -15,7 +15,7 @@ noteId > 0
 **logic**<br/>
 service add note ID and user ID (from user request) in table like_note
 
-**out coming data if access**<br/>
+**out coming data if success**<br/>
 status 200
 
 ## deleteLike method (auth)
@@ -29,7 +29,7 @@ noteId > 0
 **logic**<br/>
 service delete note ID and userID (from user request) in table like_note
 
-**out coming data if saccess**<br/>
+**out coming data if success**<br/>
 status 200
 
 ## commentNote (auth)
@@ -47,7 +47,7 @@ text >= 1 symbols, text <= 140 symbols, allowed characters a-zA-Z0-9а-яА-Я.,
 **logic**<br/>
 service add comment ID, user ID (from user request) in table comment
 
-**out coming data if saccess**<br/>
+**out coming data if success**<br/>
 status 200
 
 ## deleteComment (auth)
@@ -61,7 +61,7 @@ commentId > 0
 **logic**<br/>
 service delete comment from 'comment' table provided that the comment belongs to the user or refers to the user's note
 
-**out coming data if saccess**<br/>
+**out coming data if success**<br/>
 status 200
 
 ## blockUser method (auth)
@@ -80,7 +80,7 @@ while a blocked user cannot:
 
 if the blocked user was subscribed to the user who block him, the subscription is deleted
 
-**out coming data if saccess**<br/>
+**out coming data if success**<br/>
 status 200
 
 ## getBlockedUsers (auth)
@@ -91,7 +91,7 @@ status 200
 **logic**<br/>
 service returns a list of ID and nickname of users that the user has blocked
 
-**out coming data if saccess**<br/>
+**out coming data if success**<br/>
 status 200
 ```json
 {

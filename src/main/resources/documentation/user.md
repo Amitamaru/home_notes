@@ -25,7 +25,7 @@ If it is present then returns NICKNAME_BUSY,<br/>
 else generate accessToken, encrypts incoming password, and write in table user (nickname, password, accessToken)<br/>
 returns to client access
 
-**out coming data if access**<br/>
+**out coming data if success**<br/>
 status 200
 ```json
 {
@@ -34,7 +34,7 @@ status 200
   }
 }
 ```
-**out coming data if not saccess**<br/>
+**out coming data if not success**<br/>
 status 400
 ```json
 {
@@ -71,7 +71,7 @@ service encrypting incoming passwords like in the registration method and search
 If it is present then returns accessToken<br/>
 Else returns exception USER_NOT_FOUND
 
-**out coming data if access**<br/>
+**out coming data if success**<br/>
 status 200
 ```json
 {
@@ -80,7 +80,7 @@ status 200
   }
 }
 ```
-**out coming data if not saccess**<br/>
+**out coming data if not success**<br/>
 status 400
 ```json
 {
@@ -122,10 +122,10 @@ else getting user ID by accessToken,<br/>
 Write a note in the table note,<br/>
 Check by every tag in table 'tag', if not present - then write in table 'tag' and write tags ID and note ID in table 'note_tag'
 
-**out coming data if access**<br/>
+**out coming data if success**<br/>
 status 200
 
-**out coming data if not saccess**<br/>
+**out coming data if not success**<br/>
 status 400
 ```json
 {
@@ -144,7 +144,7 @@ service getting notes by user ID,<br/>
 getting tags by note ID,<br/>
 arranges notes by time from new to old and sends them to the user
 
-**out coming data if saccess**<br/>
+**out coming data if success**<br/>
 status 200
 ```json
 {
@@ -188,7 +188,7 @@ status 200
   }
 }
 ```
-**out coming data if not saccess**<br/>
+**out coming data if not success**<br/>
 status 400
 ```json
 {
@@ -218,7 +218,7 @@ If a nickname is available then the service encrypting a new password and genera
 nickname >= 4 symbols, <= 15 symbols, allowed characters a-zA-Z0-9а-яА-Я. _-<br/>
 password >= 8 symbols, <= 100 symbols, allowed characters a-zA-Z0-9а-яА-Я.,:; _?!+=/'\"*(){}[]-
 
-**Outcoming data if saccess**<br/>
+**Outcoming data if success**<br/>
 status 200
 ```json
 {
@@ -228,7 +228,7 @@ status 200
 }
 ```
 
-**out coming data if not saccess**<br/>
+**out coming data if not success**<br/>
 status 400
 ```json
 {
