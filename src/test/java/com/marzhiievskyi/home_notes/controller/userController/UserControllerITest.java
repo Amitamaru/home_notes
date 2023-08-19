@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.marzhiievskyi.home_notes.controller.userController.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserControllerITest extends AbstractControllerTest {
@@ -23,6 +24,7 @@ public class UserControllerITest extends AbstractControllerTest {
     private static final String REST_USER_LOGIN_URL = REST_USER_URL + "/login";
     private static final String REST_USER_PUBLIC_NOTE_URL = REST_USER_URL + "/publicNote";
     private static final String REST_USER_GET_MY_NOTES_URL = REST_USER_URL + "/getMyNotes";
+    private static final String REST_USER_CHANGE_LOGIN_PASSWORD_URL = REST_USER_URL + "/changeAuthorization";
 
 
     @Autowired
@@ -33,7 +35,6 @@ public class UserControllerITest extends AbstractControllerTest {
     CommonDao commonDao;
     @Autowired
     CommonTestService commonTestService;
-
 
 
     @AfterEach
@@ -53,14 +54,7 @@ public class UserControllerITest extends AbstractControllerTest {
         //given
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_REGISTRATION_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                          "authorization": {
-                            "nickname": "amitamaru",
-                            "password": "1234567890"
-                          }
-                        }
-                        """);
+                .content(USER_AMITAMARU_JSON);
         //when
         perform(requestBuilder)
                 //then
@@ -78,28 +72,14 @@ public class UserControllerITest extends AbstractControllerTest {
         commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_REGISTRATION_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                          "authorization": {
-                            "nickname": "amitamaru",
-                            "password": "1234567890"
-                          }
-                        }
-                        """);
+                .content(USER_AMITAMARU_JSON);
         //when
         perform(requestBuilder)
                 //then
                 .andExpectAll(
                         status().is4xxClientError(),
                         content().contentType(MediaType.APPLICATION_JSON),
-                        content().json("""
-                                  {
-                                      "error": {
-                                          "code": "NICKNAME_BUSY",
-                                          "userMessage": "this nickname is busy please enter another"
-                                      }
-                                  }
-                                """)
+                        content().json(NICKNAME_BUSY_ERROR_JSON)
                 );
     }
 
@@ -110,14 +90,7 @@ public class UserControllerITest extends AbstractControllerTest {
         commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_LOGIN_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                          "authorization": {
-                            "nickname": "amitamaru",
-                            "password": "1234567890"
-                          }
-                        }
-                        """);
+                .content(USER_AMITAMARU_JSON);
         //when
         perform(requestBuilder)
                 //then
@@ -135,28 +108,14 @@ public class UserControllerITest extends AbstractControllerTest {
         commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_LOGIN_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                          "authorization": {
-                            "nickname": "desmont",
-                            "password": "1234567890"
-                          }
-                        }
-                        """);
+                .content(USER_AMITAMARU_WRONG_DATA_JSON);
         //when
         perform(requestBuilder)
                 //then
                 .andExpectAll(
                         status().is4xxClientError(),
                         content().contentType(MediaType.APPLICATION_JSON),
-                        content().json("""
-                                  {
-                                      "error": {
-                                          "code": "USER_NOT_FOUND",
-                                          "userMessage": "user not found"
-                                      }
-                                  }
-                                """)
+                        content().json(USER_NOT_FOUND_ERROR_JSON)
                 );
     }
 
@@ -166,17 +125,8 @@ public class UserControllerITest extends AbstractControllerTest {
         commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_PUBLIC_NOTE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("accessToken", USER_ACCESS_TOKEN)
-                .content("""
-                        {
-                          "text": "note test",
-                          "tags": [
-                                "test",
-                                "two",
-                                "three"
-                          ]
-                        }
-                        """);
+                .header(ACCESS_TOKEN_FIELD, USER_ACCESS_TOKEN)
+                .content(USER_PUBLIC_NOTE_JSON);
         //when
         perform(requestBuilder)
                 //then
@@ -193,31 +143,15 @@ public class UserControllerITest extends AbstractControllerTest {
         commonTestService.prepareUser();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_PUBLIC_NOTE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("accessToken", "wrongAccessToken")
-                .content("""
-                        {
-                          "text": "note test",
-                          "tags": [
-                                "test",
-                                "two",
-                                "three"
-                          ]
-                        }
-                        """);
+                .header(ACCESS_TOKEN_FIELD, USER_WRONG_ACCESS_TOKEN)
+                .content(USER_PUBLIC_NOTE_JSON);
         //when
         perform(requestBuilder)
                 //then
                 .andExpectAll(
                         status().is4xxClientError(),
                         content().contentType(MediaType.APPLICATION_JSON),
-                        content().json("""
-                                  {
-                                      "error": {
-                                          "code": "AUTHORIZATION_ERROR",
-                                          "userMessage": "error of authorization"
-                                      }
-                                  }
-                                """)
+                        content().json(AUTHORIZATION_ERROR_JSON)
                 );
     }
 
@@ -227,29 +161,33 @@ public class UserControllerITest extends AbstractControllerTest {
         commonTestService.prepareUser();
         prepareNotes();
         var requestBuilder = MockMvcRequestBuilders.get(REST_USER_GET_MY_NOTES_URL)
-                .header("accessToken", USER_ACCESS_TOKEN);
+                .header(ACCESS_TOKEN_FIELD, USER_ACCESS_TOKEN);
         //when
         perform(requestBuilder)
                 //then
                 .andExpectAll(
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON),
-                        content().json("""
-                                {
-                                    "data": {
-                                        "notes": [
-                                            {
-                                                "nickname": "amitamaru",
-                                                "text": "note test"
-                                            },
-                                            {
-                                                "nickname": "amitamaru",
-                                                "text": "second note test"
-                                            }
-                                        ]
-                                    }
-                                }
-                                """)
+                        content().json(USER_GET_MY_NOTES_RESPONSE_JSON)
                 );
+    }
+
+    @Test
+    public void changeNicknamePassword_payloadsValid_returnsValidEntityResponse() throws Exception {
+        //given
+        commonTestService.prepareUser();
+        var requestBuilder = MockMvcRequestBuilders.patch(REST_USER_CHANGE_LOGIN_PASSWORD_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(ACCESS_TOKEN_FIELD, USER_ACCESS_TOKEN)
+                .content(USER_TO_CHANGE_LOGIN_PASSWORD_JSON);
+        //when
+        perform(requestBuilder)
+                .andExpectAll(
+                        status().isOk(),
+                        content().contentType(MediaType.APPLICATION_JSON),
+                        jsonPath("$.data.accessToken").exists()
+                );
+        assertEquals(USER_TO_CHANGE_NICKNAME, commonDao.findUserNicknameByGiven(USER_TO_CHANGE_NICKNAME));
+        assertNotEquals(USER_ACCESS_TOKEN, commonDao.findUserAccessTokenByNickname(USER_TO_CHANGE_NICKNAME));
     }
 }

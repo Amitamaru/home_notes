@@ -102,13 +102,24 @@ public class UserDaoImpl extends JdbcDaoSupport implements UserDao {
 
     @Override
     public List<NoteResponseDto> getNotesByUserId(Long userId) {
-        return jdbcTemplate.query(  "SELECT note.id AS note_id, u.id AS user_id, u.nickname, note.text, note.time_insert " +
-                                        "FROM note JOIN user u on note.user_id = u.id " +
-                                        "WHERE user_id = ? " +
-                                        "ORDER BY time_insert DESC ", new NoteResponseRowMapper(), userId);
+        return jdbcTemplate.query("SELECT note.id AS note_id, u.id AS user_id, u.nickname, note.text, note.time_insert " +
+                "FROM note JOIN user u on note.user_id = u.id " +
+                "WHERE user_id = ? " +
+                "ORDER BY time_insert DESC ", new NoteResponseRowMapper(), userId);
     }
 
     public void removeUser(String nickname) {
         jdbcTemplate.update("DELETE FROM user WHERE nickname = ?", nickname);
+    }
+
+    @Override
+    public void updateUser(Long userId, UserDto userDto) {
+        jdbcTemplate.update("UPDATE user " +
+                        "SET nickname = ?, password = ?, access_token = ?" +
+                        "WHERE id = ?",
+                userDto.getNickname(),
+                userDto.getEncryptedPassword(),
+                userDto.getAccessToken(),
+                userId);
     }
 }

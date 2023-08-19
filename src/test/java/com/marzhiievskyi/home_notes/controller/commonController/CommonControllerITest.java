@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static com.marzhiievskyi.home_notes.controller.commonController.TestData.*;
 import static com.marzhiievskyi.home_notes.controller.userController.UserTestData.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,24 +70,7 @@ public class CommonControllerITest extends AbstractControllerTest {
                 .andExpectAll(
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON),
-                        content().json("""
-                                {
-                                    "data": {
-                                        "notes": [
-                                            {            \s
-                                                "nickname": "amitamaru",
-                                                "text": "second note test",
-                                                "likesCount": 0
-                                            },
-                                            {             \s
-                                                "nickname": "amitamaru",
-                                                "text": "note test",
-                                                "likesCount": 0
-                                            }
-                                        ]
-                                    }
-                                }
-                                """)
+                        content().json(COMMON_GET_NOTES_RESPONSE_JSON)
                 );
 
     }

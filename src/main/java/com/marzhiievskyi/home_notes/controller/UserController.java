@@ -36,4 +36,10 @@ public class UserController {
     public ResponseEntity<Response> getUserNotes(@RequestHeader String accessToken) {
         return userService.getUserNotes(accessToken);
     }
+    @PatchMapping("/changeAuthorization")
+    public ResponseEntity<Response> changeLoginAndPassword(
+            @RequestHeader String accessToken,
+            @RequestBody final LoginRequestUserDto changeLogPasRequest) {
+        return userService.changeLoginAndPassword(accessToken, changeLogPasRequest);
+    }
 }
