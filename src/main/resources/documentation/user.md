@@ -2,7 +2,8 @@
 
 - User must be able to register and log in
 - Public notes, add to his note tags
-- Get his notes<br/><br/>
+- Get his notes
+- Change username and password<br/><br/>
 
 ## Registration method
 **incoming data**
@@ -33,7 +34,7 @@ status 200
   }
 }
 ```
-**out coming data if not access**<br/>
+**out coming data if not saccess**<br/>
 status 400
 ```json
 {
@@ -79,7 +80,7 @@ status 200
   }
 }
 ```
-**out coming data if not access**<br/>
+**out coming data if not saccess**<br/>
 status 400
 ```json
 {
@@ -124,7 +125,7 @@ Check by every tag in table 'tag', if not present - then write in table 'tag' an
 **out coming data if access**<br/>
 status 200
 
-**out coming data if not access**<br/>
+**out coming data if not saccess**<br/>
 status 400
 ```json
 {
@@ -143,7 +144,7 @@ service getting notes by user ID,<br/>
 getting tags by note ID,<br/>
 arranges notes by time from new to old and sends them to the user
 
-**out coming data if access**<br/>
+**out coming data if saccess**<br/>
 status 200
 ```json
 {
@@ -187,7 +188,7 @@ status 200
   }
 }
 ```
-**out coming data if not access**<br/>
+**out coming data if not saccess**<br/>
 status 400
 ```json
 {
@@ -197,3 +198,62 @@ status 400
   }
 }
 ```
+## changeAuthorization method (auth)
+**incoming data**<br/>
+`AccessToken: d4a76068f5104f26975499d22bcd11cc1665995491673`<br/>
+```json
+{
+  "authorization": {
+    "nickname": "YourNewNickname",
+    "password": "YourNewPassword"
+  }
+}
+```
+**logic**<br/>
+service check that accessToken is valid,<br/>
+then check that nickname is not busy, (the user can leave his old nickname and change only the password)<br/>
+If a nickname is available then the service encrypting a new password and generates a new accessToken and writes it to the user table<br/>
+
+**validation**<br/>
+nickname >= 4 symbols, <= 15 symbols, allowed characters a-zA-Z0-9а-яА-Я. _-<br/>
+password >= 8 symbols, <= 100 symbols, allowed characters a-zA-Z0-9а-яА-Я.,:; _?!+=/'\"*(){}[]-
+
+**Outcoming data if saccess**<br/>
+status 200
+```json
+{
+  "data": {
+    "accessToken": "d4a76068f5104f26975499d22bcd11cc1665995491673"
+  }
+}
+```
+
+**out coming data if not saccess**<br/>
+status 400
+```json
+{
+  "error": {
+    "code": "REQUEST_VALIDATION_ERROR",
+    "userMessage": "incorrect nickname. incorrect password"
+  }
+}
+```
+```json
+{
+  "error": {
+    "code": "NICKNAME_BUSY",
+    "userMessage": "this nickname is busy please enter another"
+  }
+}
+```
+```json
+{
+  "error": {
+    "code": "USER_NOT_FOUND",
+    "userMessage": "user not found"
+  }
+}
+```
+
+
+
