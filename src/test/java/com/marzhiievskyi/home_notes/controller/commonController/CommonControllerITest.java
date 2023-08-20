@@ -1,7 +1,7 @@
 package com.marzhiievskyi.home_notes.controller.commonController;
 
 import com.marzhiievskyi.home_notes.AbstractControllerTest;
-import com.marzhiievskyi.home_notes.controller.service.CommonTestService;
+import com.marzhiievskyi.home_notes.controller.testUtils.CommonTestService;
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.UserDao;
 import com.marzhiievskyi.home_notes.service.SearchService;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.marzhiievskyi.home_notes.controller.commonController.TestData.*;
-import static com.marzhiievskyi.home_notes.controller.userController.UserTestData.*;
+import static com.marzhiievskyi.home_notes.controller.testUtils.testData.CommonTestData.*;
+import static com.marzhiievskyi.home_notes.controller.testUtils.testData.UserTestData.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,7 +36,7 @@ public class CommonControllerITest extends AbstractControllerTest {
     CommonTestService commonTestService;
 
     public void prepareData() {
-        commonTestService.prepareUser();
+        commonTestService.prepareUser(USER_NICKNAME, USER_PASSWORD, USER_ACCESS_TOKEN);
         userDao.addNoteByUserId(NOTE_TEXT, commonDao.findUserIdIByTokenOrThrowException(USER_ACCESS_TOKEN));
         userDao.addNoteByUserId(NOTE2_TEXT, commonDao.findUserIdIByTokenOrThrowException(USER_ACCESS_TOKEN));
 

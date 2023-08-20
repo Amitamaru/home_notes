@@ -1,25 +1,24 @@
 package com.marzhiievskyi.home_notes.controller.userController;
 
 import com.marzhiievskyi.home_notes.AbstractControllerTest;
-import com.marzhiievskyi.home_notes.controller.service.CommonTestService;
+import com.marzhiievskyi.home_notes.controller.testUtils.testData.CommonTestData;
+import com.marzhiievskyi.home_notes.controller.testUtils.CommonTestService;
 import com.marzhiievskyi.home_notes.dao.CommonDao;
 import com.marzhiievskyi.home_notes.dao.UserDao;
-import com.marzhiievskyi.home_notes.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.marzhiievskyi.home_notes.controller.userController.UserTestData.*;
+import static com.marzhiievskyi.home_notes.controller.testUtils.testData.UserTestData.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserControllerITest extends AbstractControllerTest {
     //URLS
-    private static final String REST_URL = "/home-notes";
-    private static final String REST_USER_URL = REST_URL + "/user";
+    private static final String REST_USER_URL = CommonTestData.REST_URL + "/user";
     private static final String REST_USER_REGISTRATION_URL = REST_USER_URL + "/registration";
     private static final String REST_USER_LOGIN_URL = REST_USER_URL + "/login";
     private static final String REST_USER_PUBLIC_NOTE_URL = REST_USER_URL + "/publicNote";
@@ -27,8 +26,7 @@ public class UserControllerITest extends AbstractControllerTest {
     private static final String REST_USER_CHANGE_LOGIN_PASSWORD_URL = REST_USER_URL + "/changeAuthorization";
 
 
-    @Autowired
-    UserService userService;
+
     @Autowired
     UserDao userDao;
     @Autowired
@@ -46,6 +44,10 @@ public class UserControllerITest extends AbstractControllerTest {
     private void prepareNotes() {
         userDao.addNoteByUserId(NOTE_TEXT, commonDao.findUserIdIByTokenOrThrowException(USER_ACCESS_TOKEN));
         userDao.addNoteByUserId(NOTE2_TEXT, commonDao.findUserIdIByTokenOrThrowException(USER_ACCESS_TOKEN));
+    }
+
+    private void prepareData() {
+        commonTestService.prepareUser(USER_NICKNAME, USER_PASSWORD, USER_ACCESS_TOKEN);
     }
 
 
@@ -69,7 +71,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void registrationNewUser_payloadsInvalid_returnsErrorResponseEntity() throws Exception {
         //given
-        commonTestService.prepareUser();
+        prepareData();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_REGISTRATION_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(USER_AMITAMARU_JSON);
@@ -87,7 +89,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void loginUser_payloadsValid_returnsValidResponse() throws Exception {
         //given
-        commonTestService.prepareUser();
+        prepareData();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_LOGIN_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(USER_AMITAMARU_JSON);
@@ -105,7 +107,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void loginUser_payloadsWrongUser_returnsErrorResponseEntity() throws Exception {
         //given
-        commonTestService.prepareUser();
+        prepareData();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_LOGIN_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(USER_AMITAMARU_WRONG_DATA_JSON);
@@ -122,7 +124,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void publicNote_payloadsValid() throws Exception {
         //given
-        commonTestService.prepareUser();
+        prepareData();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_PUBLIC_NOTE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(ACCESS_TOKEN_FIELD, USER_ACCESS_TOKEN)
@@ -140,7 +142,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void publicNote_payloadsWrongUser_ReturnsErrorEntity() throws Exception {
         //given
-        commonTestService.prepareUser();
+        prepareData();
         var requestBuilder = MockMvcRequestBuilders.post(REST_USER_PUBLIC_NOTE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(ACCESS_TOKEN_FIELD, USER_WRONG_ACCESS_TOKEN)
@@ -158,7 +160,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void getMyNotes_returnsValidResponse() throws Exception {
         //given
-        commonTestService.prepareUser();
+        prepareData();
         prepareNotes();
         var requestBuilder = MockMvcRequestBuilders.get(REST_USER_GET_MY_NOTES_URL)
                 .header(ACCESS_TOKEN_FIELD, USER_ACCESS_TOKEN);
@@ -175,7 +177,7 @@ public class UserControllerITest extends AbstractControllerTest {
     @Test
     public void changeNicknamePassword_payloadsValid_returnsValidEntityResponse() throws Exception {
         //given
-        commonTestService.prepareUser();
+        prepareData();
         var requestBuilder = MockMvcRequestBuilders.patch(REST_USER_CHANGE_LOGIN_PASSWORD_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(ACCESS_TOKEN_FIELD, USER_ACCESS_TOKEN)
@@ -187,7 +189,7 @@ public class UserControllerITest extends AbstractControllerTest {
                         content().contentType(MediaType.APPLICATION_JSON),
                         jsonPath("$.data.accessToken").exists()
                 );
-        assertEquals(USER_TO_CHANGE_NICKNAME, commonDao.findUserNicknameByGiven(USER_TO_CHANGE_NICKNAME));
-        assertNotEquals(USER_ACCESS_TOKEN, commonDao.findUserAccessTokenByNickname(USER_TO_CHANGE_NICKNAME));
+        assertEquals(USER_DESMONT_NICKNAME, commonDao.findUserNicknameByGiven(USER_DESMONT_NICKNAME));
+        assertNotEquals(USER_ACCESS_TOKEN, commonDao.findUserAccessTokenByNickname(USER_DESMONT_NICKNAME));
     }
 }
