@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/home-notes/reaction/")
+@RequestMapping("/api/reaction/")
 public class ReactionController {
 
     private final ReactionService reactionService;
