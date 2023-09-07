@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class CommonControllerITest extends AbstractControllerTest {
 
-    private static final String REST_URL = "/home-notes";
+    private static final String REST_URL = "/api";
     private static final String REST_URL_VERSION = REST_URL + "/version";
     private static final String REST_URL_GET_LATEST_NOTES = REST_URL + "/getNotes/0/2";
 
